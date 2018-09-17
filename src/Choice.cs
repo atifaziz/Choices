@@ -51,6 +51,56 @@ namespace Choices
                                    second => otherwise(ChoiceOf3<T1, T2, T3>.Choice2(second)),
                                    third  => otherwise(ChoiceOf3<T1, T2, T3>.Choice3(third)),
                                    selector);
+
+        public static ChoiceOf1<TResult> Map<T, TResult>(this ChoiceOf1<T> choice, Func<T, TResult> selector) =>
+            choice.Match(x => ChoiceOf1<TResult>.Choice1(selector(x)));
+
+        public static ChoiceOf2<TResult, T2> Map1<T1, T2, TResult>(this ChoiceOf2<T1, T2> choice, Func<T1, TResult> selector) =>
+            choice.Match(x => ChoiceOf2<TResult, T2>.Choice1(selector(x)),
+                         ChoiceOf2<TResult, T2>.Choice2);
+
+        public static ChoiceOf2<T1, TResult> Map2<T1, T2, TResult>(this ChoiceOf2<T1, T2> choice, Func<T2, TResult> selector) =>
+            choice.Match(ChoiceOf2<T1, TResult>.Choice1,
+                         x => ChoiceOf2<T1, TResult>.Choice2(selector(x)));
+
+        public static ChoiceOf3<TResult, T2, T3> Map1<T1, T2, T3, TResult>(this ChoiceOf3<T1, T2, T3> choice, Func<T1, TResult> selector) =>
+            choice.Match(x => ChoiceOf3<TResult, T2, T3>.Choice1(selector(x)),
+                         ChoiceOf3<TResult, T2, T3>.Choice2,
+                         ChoiceOf3<TResult, T2, T3>.Choice3);
+
+        public static ChoiceOf3<T1, TResult, T3> Map2<T1, T2, T3, TResult>(this ChoiceOf3<T1, T2, T3> choice, Func<T2, TResult> selector) =>
+            choice.Match(ChoiceOf3<T1, TResult, T3>.Choice1,
+                         x => ChoiceOf3<T1, TResult, T3>.Choice2(selector(x)),
+                         ChoiceOf3<T1, TResult, T3>.Choice3);
+
+        public static ChoiceOf3<T1, T2, TResult> Map3<T1, T2, T3, TResult>(this ChoiceOf3<T1, T2, T3> choice, Func<T3, TResult> selector) =>
+            choice.Match(ChoiceOf3<T1, T2, TResult>.Choice1,
+                         ChoiceOf3<T1, T2, TResult>.Choice2,
+                         x => ChoiceOf3<T1, T2, TResult>.Choice3(selector(x)));
+
+        public static ChoiceOf4<TResult, T2, T3, T4> Map1<T1, T2, T3, T4, TResult>(this ChoiceOf4<T1, T2, T3, T4> choice, Func<T1, TResult> selector) =>
+            choice.Match(x => ChoiceOf4<TResult, T2, T3, T4>.Choice1(selector(x)),
+                         ChoiceOf4<TResult, T2, T3, T4>.Choice2,
+                         ChoiceOf4<TResult, T2, T3, T4>.Choice3,
+                         ChoiceOf4<TResult, T2, T3, T4>.Choice4);
+
+        public static ChoiceOf4<T1, TResult, T3, T4> Map2<T1, T2, T3, T4, TResult>(this ChoiceOf4<T1, T2, T3, T4> choice, Func<T2, TResult> selector) =>
+            choice.Match(ChoiceOf4<T1, TResult, T3, T4>.Choice1,
+                         x => ChoiceOf4<T1, TResult, T3, T4>.Choice2(selector(x)),
+                         ChoiceOf4<T1, TResult, T3, T4>.Choice3,
+                         ChoiceOf4<T1, TResult, T3, T4>.Choice4);
+
+        public static ChoiceOf4<T1, T2, TResult, T4> Map3<T1, T2, T3, T4, TResult>(this ChoiceOf4<T1, T2, T3, T4> choice, Func<T3, TResult> selector) =>
+            choice.Match(ChoiceOf4<T1, T2, TResult, T4>.Choice1,
+                         ChoiceOf4<T1, T2, TResult, T4>.Choice2,
+                         x => ChoiceOf4<T1, T2, TResult, T4>.Choice3(selector(x)),
+                         ChoiceOf4<T1, T2, TResult, T4>.Choice4);
+
+        public static ChoiceOf4<T1, T2, T3, TResult> Map4<T1, T2, T3, T4, TResult>(this ChoiceOf4<T1, T2, T3, T4> choice, Func<T4, TResult> selector) =>
+            choice.Match(ChoiceOf4<T1, T2, T3, TResult>.Choice1,
+                         ChoiceOf4<T1, T2, T3, TResult>.Choice2,
+                         ChoiceOf4<T1, T2, T3, TResult>.Choice3,
+                         x => ChoiceOf4<T1, T2, T3, TResult>.Choice4(selector(x)));
     }
 
     abstract partial class ChoiceOf1<T>
