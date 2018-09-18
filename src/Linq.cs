@@ -47,17 +47,6 @@ namespace Choices.Linq.Right
         }
 
         public static IChoice<T1, TResult>
-            SelectMany<T1, T2, TResult>(
-                this IChoice<T1, T2> first,
-                Func<T2, IChoice<T1, TResult>> secondSelector)
-        {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (secondSelector == null) throw new ArgumentNullException(nameof(secondSelector));
-
-            return first.Bind(secondSelector);
-        }
-
-        public static IChoice<T1, TResult>
             SelectMany<T1, T2, T3, TResult>(
                 this IChoice<T1, T2> first,
                 Func<T2, IChoice<T1, T3>> secondSelector,
@@ -102,17 +91,6 @@ namespace Choices.Linq.Left
             if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return choice.Bind(a => Choice1<TResult, T2>(selector(a)));
-        }
-
-        public static IChoice<TResult, T2>
-            SelectMany<T1, T2, TResult>(
-                this IChoice<T1, T2> first,
-                Func<T1, IChoice<TResult, T2>> secondSelector)
-        {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (secondSelector == null) throw new ArgumentNullException(nameof(secondSelector));
-
-            return first.Bind(secondSelector);
         }
 
         public static IChoice<TResult, T2>
