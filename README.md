@@ -1,5 +1,9 @@
 # Choices
 
+[![Build Status][build-badge]][builds]
+[![NuGet][nuget-badge]][nuget-pkg]
+[![MyGet][myget-badge]][edge-pkgs]
+
 Choices is a .NET Standard library that provides _choice types_, otherwise
 known as generic or general-purpose discriminated unions.
 
@@ -175,3 +179,11 @@ On Linux or macOS, run:
     ./test.sh
 
 This will also build the binaries if necessary.
+
+
+[build-badge]: https://img.shields.io/appveyor/ci/raboof/choices/master.svg
+[builds]: https://ci.appveyor.com/project/raboof/choices
+[myget-badge]: https://img.shields.io/myget/raboof/vpre/Choices.svg?label=myget
+[edge-pkgs]: https://www.myget.org/feed/raboof/package/nuget/Choices
+[nuget-badge]: https://img.shields.io/nuget/v/Choices.svg
+[nuget-pkg]: https://www.nuget.org/packages/Choices
