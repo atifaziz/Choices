@@ -44,7 +44,7 @@ var rc = nc.Map1(n => n.ToString()); // = "82"
            .Map2(s => s.Length);     // = 6
 ```
 
-Note that `rc` now has a type of `ChoiceOf2<string, int>`.
+Note that `rc` now has a type of `Choice<string, int>`.
 
 Use `Choice.If` to base the construction of choice based on some condition:
 
