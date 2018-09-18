@@ -33,15 +33,15 @@ var sc = Choice2<int, string>("foobar");
 Match either of the choices:
 
 ```c#
-var r1 = nc.Match(n => n * 2, s => _.Length); // = 82
-var r2 = sc.Match(n => n * 2, s => _.Length); // = 6
+var r1 = nc.Match(n => n * 2, s => s.Length); // = 82
+var r2 = sc.Match(n => n * 2, s => s.Length); // = 6
 ```
 
 Map a choice:
 
 ```c#
 var rc = nc.Map1(n => n.ToString()); // = "82"
-           .Map2(s => _.Length);     // = 6
+           .Map2(s => s.Length);     // = 6
 ```
 
 Note that `rc` now has a type of `ChoiceOf2<string, int>`.
