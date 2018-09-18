@@ -18,6 +18,7 @@ namespace Choices.Tests
 {
     using System;
     using NUnit.Framework;
+    using static Choice.New;
 
     [TestFixture]
     public class ChoiceTests
@@ -104,7 +105,7 @@ namespace Choices.Tests
         {
             var map = Choice.When1((int x) => x * 2);
             Assert.That(map, Is.Not.Null);
-            var result = map(Choice<int>.Choice1(42));
+            var result = map(Choice1(42));
             Assert.That(result, Is.EqualTo(84));
         }
 
@@ -115,10 +116,10 @@ namespace Choices.Tests
                             .When2((string s) => s.Length);
             Assert.That(map, Is.Not.Null);
 
-            var r1 = map(Choice<int, string>.Choice1(42));
+            var r1 = map(Choice1<int, string>(42));
             Assert.That(r1, Is.EqualTo(84));
 
-            var r2 = map(Choice<int, string>.Choice2("foobar"));
+            var r2 = map(Choice2<int, string>("foobar"));
             Assert.That(r2, Is.EqualTo(6));
         }
 
@@ -130,13 +131,13 @@ namespace Choices.Tests
                             .When3((DateTime d) => d.Ticks);
             Assert.That(map, Is.Not.Null);
 
-            var r1 = map(Choice<int, string, DateTime>.Choice1(42));
+            var r1 = map(Choice1<int, string, DateTime>(42));
             Assert.That(r1, Is.EqualTo(84));
 
-            var r2 = map(Choice<int, string, DateTime>.Choice2("foobar"));
+            var r2 = map(Choice2<int, string, DateTime>("foobar"));
             Assert.That(r2, Is.EqualTo(6));
 
-            var r3 = map(Choice<int, string, DateTime>.Choice3(new DateTime(1970, 1, 1)));
+            var r3 = map(Choice3<int, string, DateTime>(new DateTime(1970, 1, 1)));
             Assert.That(r3, Is.EqualTo(621355968000000000L));
         }
 
@@ -149,16 +150,16 @@ namespace Choices.Tests
                             .When4((char c) => '*');
             Assert.That(map, Is.Not.Null);
 
-            var r1 = map(Choice<int, string, DateTime, char>.Choice1(42));
+            var r1 = map(Choice1<int, string, DateTime, char>(42));
             Assert.That(r1, Is.EqualTo(84));
 
-            var r2 = map(Choice<int, string, DateTime, char>.Choice2("foobar"));
+            var r2 = map(Choice2<int, string, DateTime, char>("foobar"));
             Assert.That(r2, Is.EqualTo(6));
 
-            var r3 = map(Choice<int, string, DateTime, char>.Choice3(new DateTime(1970, 1, 1)));
+            var r3 = map(Choice3<int, string, DateTime, char>(new DateTime(1970, 1, 1)));
             Assert.That(r3, Is.EqualTo(621355968000000000L));
 
-            var r4 = map(Choice<int, string, DateTime, char>.Choice4('*'));
+            var r4 = map(Choice4<int, string, DateTime, char>('*'));
             Assert.That(r4, Is.EqualTo(42));
         }
     }

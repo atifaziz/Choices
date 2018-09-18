@@ -19,14 +19,15 @@ namespace Choices.Linq.Right.Tests
     using System;
     using System.Globalization;
     using NUnit.Framework;
+    using static Choice.New;
 
     [TestFixture]
     public class LinqTests
     {
-        static Choice<FormatException, int> TryParseInt32(string s) =>
+        static IChoice<FormatException, int> TryParseInt32(string s) =>
             int.TryParse(s, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out var n)
-            ? Choice<FormatException, int>.Choice2(n)
-            : Choice<FormatException, int>.Choice1(new FormatException($"\"{s}\" is not a valid signed integer."));
+            ? Choice2<FormatException, int>(n)
+            : Choice1<FormatException, int>(new FormatException($"\"{s}\" is not a valid signed integer."));
 
         static T AssertNotCalled<T>()
         {
@@ -39,7 +40,7 @@ namespace Choices.Linq.Right.Tests
         {
             var error =
                 TryParseInt32("forty-two")
-                    .Bind(_ => AssertNotCalled<Choice<FormatException, object>>())
+                    .Bind(_ => AssertNotCalled<IChoice<FormatException, object>>())
                     .Match(e => e, _ => AssertNotCalled<FormatException>());
 
             Assert.That(error, Is.InstanceOf(typeof(FormatException)));
@@ -51,7 +52,7 @@ namespace Choices.Linq.Right.Tests
         {
             var n =
                 TryParseInt32("1970")
-                    .Bind(y => Choice<FormatException, DateTime>.Choice2(new DateTime(y, 1, 1)))
+                    .Bind(y => Choice2<FormatException, DateTime>(new DateTime(y, 1, 1)))
                     .Match(_ => AssertNotCalled<DateTime>(), d => d);
 
             Assert.That(n, Is.EqualTo(new DateTime(1970, 1, 1)));
@@ -132,14 +133,15 @@ namespace Choices.Linq.Left.Tests
     using System;
     using System.Globalization;
     using NUnit.Framework;
+    using static Choice.New;
 
     [TestFixture]
     public class LinqTests
     {
-        static Choice<int, FormatException> TryParseInt32(string s) =>
+        static IChoice<int, FormatException> TryParseInt32(string s) =>
             int.TryParse(s, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out var n)
-            ? Choice<int, FormatException>.Choice1(n)
-            : Choice<int, FormatException>.Choice2(new FormatException($"\"{s}\" is not a valid signed integer."));
+            ? Choice1<int, FormatException>(n)
+            : Choice2<int, FormatException>(new FormatException($"\"{s}\" is not a valid signed integer."));
 
         static T AssertNotCalled<T>()
         {
@@ -152,7 +154,7 @@ namespace Choices.Linq.Left.Tests
         {
             var error =
                 TryParseInt32("forty-two")
-                    .Bind(_ => AssertNotCalled<Choice<object, FormatException>>())
+                    .Bind(_ => AssertNotCalled<IChoice<object, FormatException>>())
                     .Match(_ => AssertNotCalled<FormatException>(), e => e);
 
             Assert.That(error, Is.InstanceOf(typeof(FormatException)));
@@ -164,7 +166,7 @@ namespace Choices.Linq.Left.Tests
         {
             var n =
                 TryParseInt32("1970")
-                    .Bind(y => Choice<DateTime, FormatException>.Choice1(new DateTime(y, 1, 1)))
+                    .Bind(y => Choice1<DateTime, FormatException>(new DateTime(y, 1, 1)))
                     .Match(d => d, _ => AssertNotCalled<DateTime>());
 
             Assert.That(n, Is.EqualTo(new DateTime(1970, 1, 1)));

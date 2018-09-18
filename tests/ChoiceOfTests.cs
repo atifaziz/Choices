@@ -19,6 +19,7 @@ namespace Choices.Tests
     using System;
     using System.Globalization;
     using NUnit.Framework;
+    using static Choice.New;
 
     [TestFixture]
     public class ChoiceOfTests
@@ -28,7 +29,7 @@ namespace Choices.Tests
             [Test]
             public void Choice1()
             {
-                var c = Choice<int>.Choice1(42);
+                var c = Choice1<int>(42);
                 Assert.That(c, Is.Not.Null);
                 Assert.That(c.Match(x => x * 2), Is.EqualTo(84));
             }
@@ -36,7 +37,7 @@ namespace Choices.Tests
             [Test]
             public void Map()
             {
-                var c = Choice<int>.Choice1(42);
+                var c = Choice1<int>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map(x => (char) x).Match(ch => ch);
                 Assert.That(result, Is.EqualTo('*'));
@@ -46,7 +47,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void ToString(string input, string expected)
             {
-                var actual = Choice<string>.Choice1(input).ToString();
+                var actual = Choice1<string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
         }
@@ -56,7 +57,7 @@ namespace Choices.Tests
             [Test]
             public void Choice1()
             {
-                var c = Choice<int, string>.Choice1(42);
+                var c = Choice1<int, string>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(x => x * 2,
                                      _ => throw BadChoice());
@@ -66,7 +67,7 @@ namespace Choices.Tests
             [Test]
             public void Choice2()
             {
-                var c = Choice<int, string>.Choice2("foobar");
+                var c = Choice2<int, string>("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      s => s.ToUpperInvariant());
@@ -76,7 +77,7 @@ namespace Choices.Tests
             [Test]
             public void Map1()
             {
-                var c = Choice<int, string>.Choice1(42);
+                var c = Choice1<int, string>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map1(x => (char) x)
                               .Match(ch => ch,
@@ -87,7 +88,7 @@ namespace Choices.Tests
             [Test]
             public void Map2()
             {
-                var c = Choice<int, string>.Choice2("foobar");
+                var c = Choice2<int, string>("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map2(s => s.Length)
                               .Match(_ => throw BadChoice(),
@@ -99,7 +100,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice1ToString(string input, string expected)
             {
-                var actual = Choice<string, string>.Choice1(input).ToString();
+                var actual = Choice1<string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
 
@@ -107,7 +108,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice2ToString(string input, string expected)
             {
-                var actual = Choice<string, string>.Choice2(input).ToString();
+                var actual = Choice2<string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
         }
@@ -117,7 +118,7 @@ namespace Choices.Tests
             [Test]
             public void Choice1()
             {
-                var c = Choice<int, string, DateTime>.Choice1(42);
+                var c = Choice1<int, string, DateTime>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(x => x * 2,
                                      _ => throw BadChoice(),
@@ -128,7 +129,7 @@ namespace Choices.Tests
             [Test]
             public void Choice2()
             {
-                var c = Choice<int, string, DateTime>.Choice2("foobar");
+                var c = Choice2<int, string, DateTime>("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      s => s.ToUpperInvariant(),
@@ -140,7 +141,7 @@ namespace Choices.Tests
             public void Choice3()
             {
                 var date = new DateTime(1970, 1, 1);
-                var c = Choice<int, string, DateTime>.Choice3(date);
+                var c = Choice3<int, string, DateTime>(date);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      _ => throw BadChoice(),
@@ -151,7 +152,7 @@ namespace Choices.Tests
             [Test]
             public void Map1()
             {
-                var c = Choice<int, string, DateTime>.Choice1(42);
+                var c = Choice1<int, string, DateTime>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map1(x => (char) x)
                               .Match(ch => ch,
@@ -163,7 +164,7 @@ namespace Choices.Tests
             [Test]
             public void Map2()
             {
-                var c = Choice<int, string, DateTime>.Choice2("foobar");
+                var c = Choice2<int, string, DateTime>("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map2(s => s.Length)
                               .Match(_ => throw BadChoice(),
@@ -176,7 +177,7 @@ namespace Choices.Tests
             public void Map3()
             {
                 var date = new DateTime(1970, 1, 1);
-                var c = Choice<int, string, DateTime>.Choice3(date);
+                var c = Choice3<int, string, DateTime>(date);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map3(d => d.Year)
                               .Match(_ => throw BadChoice(),
@@ -189,7 +190,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice1ToString(string input, string expected)
             {
-                var actual = Choice<string, string, string>.Choice1(input).ToString();
+                var actual = Choice1<string, string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
 
@@ -197,7 +198,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice2ToString(string input, string expected)
             {
-                var actual = Choice<string, string, string>.Choice2(input).ToString();
+                var actual = Choice2<string, string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
 
@@ -205,7 +206,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice3ToString(string input, string expected)
             {
-                var actual = Choice<string, string, string>.Choice3(input).ToString();
+                var actual = Choice3<string, string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
         }
@@ -215,7 +216,7 @@ namespace Choices.Tests
             [Test]
             public void Choice1()
             {
-                var c = Choice<int, string, DateTime, char>.Choice1(42);
+                var c = Choice1<int, string, DateTime, char>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(x => x * 2,
                                      _ => throw BadChoice(),
@@ -227,7 +228,7 @@ namespace Choices.Tests
             [Test]
             public void Choice2()
             {
-                var c = Choice<int, string, DateTime, char>.Choice2("foobar");
+                var c = Choice2<int, string, DateTime, char>("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      s => s.ToUpperInvariant(),
@@ -240,7 +241,7 @@ namespace Choices.Tests
             public void Choice3()
             {
                 var date = new DateTime(1970, 1, 1);
-                var c = Choice<int, string, DateTime, char>.Choice3(date);
+                var c = Choice3<int, string, DateTime, char>(date);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      _ => throw BadChoice(),
@@ -252,7 +253,7 @@ namespace Choices.Tests
             [Test]
             public void Choice4()
             {
-                var c = Choice<int, string, DateTime, char>.Choice4('4');
+                var c = Choice4<int, string, DateTime, char>('4');
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      _ => throw BadChoice(),
@@ -264,7 +265,7 @@ namespace Choices.Tests
             [Test]
             public void Map1()
             {
-                var c = Choice<int, string, DateTime, char>.Choice1(42);
+                var c = Choice1<int, string, DateTime, char>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map1(x => (char) x)
                               .Match(ch => ch,
@@ -277,7 +278,7 @@ namespace Choices.Tests
             [Test]
             public void Map2()
             {
-                var c = Choice<int, string, DateTime, char>.Choice2("foobar");
+                var c = Choice2<int, string, DateTime, char>("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map2(s => s.Length)
                               .Match(_ => throw BadChoice(),
@@ -291,7 +292,7 @@ namespace Choices.Tests
             public void Map3()
             {
                 var date = new DateTime(1970, 1, 1);
-                var c = Choice<int, string, DateTime, char>.Choice3(date);
+                var c = Choice3<int, string, DateTime, char>(date);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map3(d => d.Ticks)
                               .Match(_ => throw BadChoice(),
@@ -304,7 +305,7 @@ namespace Choices.Tests
             [Test]
             public void Map4()
             {
-                var c = Choice<int, string, DateTime, char>.Choice4('4');
+                var c = Choice4<int, string, DateTime, char>('4');
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map4(char.GetUnicodeCategory)
                               .Match(_ => throw BadChoice(),
@@ -318,7 +319,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice1ToString(string input, string expected)
             {
-                var actual = Choice<string, string, string, string>.Choice1(input).ToString();
+                var actual = Choice1<string, string, string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
 
@@ -326,7 +327,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice2ToString(string input, string expected)
             {
-                var actual = Choice<string, string, string, string>.Choice2(input).ToString();
+                var actual = Choice2<string, string, string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
 
@@ -334,7 +335,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice3ToString(string input, string expected)
             {
-                var actual = Choice<string, string, string, string>.Choice3(input).ToString();
+                var actual = Choice3<string, string, string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
 
@@ -342,7 +343,7 @@ namespace Choices.Tests
             [TestCase(null, "")]
             public void Choice4ToString(string input, string expected)
             {
-                var actual = Choice<string, string, string, string>.Choice4(input).ToString();
+                var actual = Choice4<string, string, string, string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
         }

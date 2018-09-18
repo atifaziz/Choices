@@ -17,34 +17,35 @@
 namespace Choices.Linq.Right
 {
     using System;
+    using static Choice.New;
 
     static partial class RightResult
     {
-        public static Choice<T, TResult> Return<T, TResult>(TResult value) =>
-            Choice<T, TResult>.Choice2(value);
+        public static IChoice<T, TResult> Return<T, TResult>(TResult value) =>
+            Choice2<T, TResult>(value);
 
-        public static Choice<T1, TResult>
+        public static IChoice<T1, TResult>
             Bind<T1, T2, TResult>(
-                this Choice<T1, T2> choice,
-                Func<T2, Choice<T1, TResult>> fun) =>
-            choice.Match(Choice<T1, TResult>.Choice1, fun);
+                this IChoice<T1, T2> choice,
+                Func<T2, IChoice<T1, TResult>> fun) =>
+            choice.Match(Choice1<T1, TResult>, fun);
 
-        public static Choice<T1, TResult>
+        public static IChoice<T1, TResult>
             Select<T1, T2, TResult>(
-                this Choice<T1, T2> choice,
+                this IChoice<T1, T2> choice,
                 Func<T2, TResult> selector) =>
-            choice.Bind(b => Choice<T1, TResult>.Choice2(selector(b)));
+            choice.Bind(b => Choice2<T1, TResult>(selector(b)));
 
-        public static Choice<T1, TResult>
+        public static IChoice<T1, TResult>
             SelectMany<T1, T2, TResult>(
-                this Choice<T1, T2> first,
-                Func<T2, Choice<T1, TResult>> secondSelector) =>
+                this IChoice<T1, T2> first,
+                Func<T2, IChoice<T1, TResult>> secondSelector) =>
             first.Bind(secondSelector);
 
-        public static Choice<T1, TResult>
+        public static IChoice<T1, TResult>
             SelectMany<T1, T2, T3, TResult>(
-                this Choice<T1, T2> first,
-                Func<T2, Choice<T1, T3>> secondSelector,
+                this IChoice<T1, T2> first,
+                Func<T2, IChoice<T1, T3>> secondSelector,
                 Func<T2, T3, TResult> resultSelector) =>
             first.Bind(b1 => secondSelector(b1).Select(b2 => resultSelector(b1, b2)));
     }
@@ -53,34 +54,35 @@ namespace Choices.Linq.Right
 namespace Choices.Linq.Left
 {
     using System;
+    using static Choice.New;
 
     static partial class LeftResult
     {
-        public static Choice<TResult, T> Return<TResult, T>(TResult value) =>
-            Choice<TResult, T>.Choice1(value);
+        public static IChoice<TResult, T> Return<TResult, T>(TResult value) =>
+            Choice1<TResult, T>(value);
 
-        public static Choice<TResult, T2>
+        public static IChoice<TResult, T2>
             Bind<T1, T2, TResult>(
-                this Choice<T1, T2> choice,
-                Func<T1, Choice<TResult, T2>> fun) =>
-            choice.Match(fun, Choice<TResult, T2>.Choice2);
+                this IChoice<T1, T2> choice,
+                Func<T1, IChoice<TResult, T2>> fun) =>
+            choice.Match(fun, Choice2<TResult, T2>);
 
-        public static Choice<TResult, T2>
+        public static IChoice<TResult, T2>
             Select<T1, T2, TResult>(
-                this Choice<T1, T2> choice,
+                this IChoice<T1, T2> choice,
                 Func<T1, TResult> selector) =>
-            choice.Bind(a => Choice<TResult, T2>.Choice1(selector(a)));
+            choice.Bind(a => Choice1<TResult, T2>(selector(a)));
 
-        public static Choice<TResult, T2>
+        public static IChoice<TResult, T2>
             SelectMany<T1, T2, TResult>(
-                this Choice<T1, T2> first,
-                Func<T1, Choice<TResult, T2>> secondSelector) =>
+                this IChoice<T1, T2> first,
+                Func<T1, IChoice<TResult, T2>> secondSelector) =>
             first.Bind(secondSelector);
 
-        public static Choice<TResult, T2>
+        public static IChoice<TResult, T2>
             SelectMany<T1, T2, T3, TResult>(
-                this Choice<T1, T2> first,
-                Func<T1, Choice<T3, T2>> secondSelector,
+                this IChoice<T1, T2> first,
+                Func<T1, IChoice<T3, T2>> secondSelector,
                 Func<T1, T3, TResult> resultSelector) =>
             first.Bind(a1 => secondSelector(a1).Select(a2 => resultSelector(a1, a2)));
     }

@@ -1,10 +1,14 @@
 namespace Choices
 {
-    public partial class Choice {}
-    public partial class Choice<T> {}
-    public partial class Choice<T1, T2> {}
-    public partial class Choice<T1, T2, T3> {}
-    public partial class Choice<T1, T2, T3, T4> {}
+    public partial class Choice
+    {
+        public partial class New {}
+    }
+
+    public partial interface IChoice<out T> {}
+    public partial interface IChoice<out T1, out T2> {}
+    public partial interface IChoice<out T1, out T2, out T3> {}
+    public partial interface IChoice<out T1, out T2, out T3, out T4> {}
 
     namespace Linq
     {

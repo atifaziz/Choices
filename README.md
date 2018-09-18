@@ -9,8 +9,25 @@ known as generic or general-purpose discriminated unions.
 Create a choice of 2 types:
 
 ```c#
-var nc = Choice<int, string>.Choice1(42);
-var sc = Choice<int, string>.Choice2("foobar");
+var nc = Choice.New.Choice1<int, string>(42);
+var sc = Choice.New.Choice2<int, string>("foobar");
+```
+
+If you are using C# 6 or later (which remaining examples assume), it is
+recommended you [statically import][using-static] `Choices.Choice.New`
+as follows:
+
+```c#
+using static Choices.Choice.New;
+```
+
+  [using-static]: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-static
+
+This makes creation of choices terser:
+
+```c#
+var nc = Choice1<int, string>(42);
+var sc = Choice2<int, string>("foobar");
 ```
 
 Match either of the choices:
@@ -50,7 +67,7 @@ var r3 =
                             "7-10")))
 ```
 
-Note that type of `r3` will be `Choice<string, string, string, string>`.
+Note that type of `r3` will be `IChoice<string, string, string, string>`.
 
 `Choice.When1`, `Choice.When2`, `Choice.When3` and so on, are useful for
 setting up a function that maps choices to results.
@@ -61,13 +78,13 @@ var map =
           .When2((string s) => s.Length)
           .When3((DateTime d) => d.Year);
 
-var c = Choice<int, string, DateTime>.Choice1(21);
+var c = Choice1<int, string, DateTime>(21);
 Console.WriteLine(map(c)); // 42
 
-c = Choice<int, string, DateTime>.Choice2("foobar");
+c = Choice2<int, string, DateTime>("foobar");
 Console.WriteLine(map(c)); // 6
 
-c = Choice<int, string, DateTime>.Choice3(new DateTime(2002, 2, 13));
+c = Choice3<int, string, DateTime>(new DateTime(2002, 2, 13));
 Console.WriteLine(map(c)); // 2002
 ```
 
@@ -85,10 +102,10 @@ Suppose the following function that attempts to parse a `string` into an
 `int`:
 
 ```c#
-static Choice<FormatException, int> TryParseInt32(string s) =>
+static IChoice<FormatException, int> TryParseInt32(string s) =>
     int.TryParse(s, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out var n)
-    ? Choice<FormatException, int>.Choice2(n)
-    : Choice<FormatException, int>.Choice1(new FormatException($"\"{s}\" is not a valid signed integer."));
+    ? Choice2<FormatException, int>(n)
+    : Choice1<FormatException, int>(new FormatException($"\"{s}\" is not a valid signed integer."));
 ```
 
 If the parsing fails, then it returns a choice where a `FormatException` is
