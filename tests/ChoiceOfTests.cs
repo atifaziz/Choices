@@ -28,7 +28,7 @@ namespace Choices.Tests
             [Test]
             public void Choice1()
             {
-                var c = ChoiceOf1<int>.Choice1(42);
+                var c = Choice<int>.Choice1(42);
                 Assert.That(c, Is.Not.Null);
                 Assert.That(c.Match(x => x * 2), Is.EqualTo(84));
             }
@@ -36,7 +36,7 @@ namespace Choices.Tests
             [Test]
             public void Map()
             {
-                var c = ChoiceOf1<int>.Choice1(42);
+                var c = Choice<int>.Choice1(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map(x => (char) x).Match(ch => ch);
                 Assert.That(result, Is.EqualTo('*'));
@@ -48,7 +48,7 @@ namespace Choices.Tests
             [Test]
             public void Choice1()
             {
-                var c = ChoiceOf2<int, string>.Choice1(42);
+                var c = Choice<int, string>.Choice1(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(x => x * 2,
                                      _ => throw BadChoice());
@@ -58,7 +58,7 @@ namespace Choices.Tests
             [Test]
             public void Choice2()
             {
-                var c = ChoiceOf2<int, string>.Choice2("foobar");
+                var c = Choice<int, string>.Choice2("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      s => s.ToUpperInvariant());
@@ -68,7 +68,7 @@ namespace Choices.Tests
             [Test]
             public void Map1()
             {
-                var c = ChoiceOf2<int, string>.Choice1(42);
+                var c = Choice<int, string>.Choice1(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map1(x => (char) x)
                               .Match(ch => ch,
@@ -79,7 +79,7 @@ namespace Choices.Tests
             [Test]
             public void Map2()
             {
-                var c = ChoiceOf2<int, string>.Choice2("foobar");
+                var c = Choice<int, string>.Choice2("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map2(s => s.Length)
                               .Match(_ => throw BadChoice(),
@@ -93,7 +93,7 @@ namespace Choices.Tests
             [Test]
             public void Choice1()
             {
-                var c = ChoiceOf3<int, string, DateTime>.Choice1(42);
+                var c = Choice<int, string, DateTime>.Choice1(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(x => x * 2,
                                      _ => throw BadChoice(),
@@ -104,7 +104,7 @@ namespace Choices.Tests
             [Test]
             public void Choice2()
             {
-                var c = ChoiceOf3<int, string, DateTime>.Choice2("foobar");
+                var c = Choice<int, string, DateTime>.Choice2("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      s => s.ToUpperInvariant(),
@@ -116,7 +116,7 @@ namespace Choices.Tests
             public void Choice3()
             {
                 var date = new DateTime(1970, 1, 1);
-                var c = ChoiceOf3<int, string, DateTime>.Choice3(date);
+                var c = Choice<int, string, DateTime>.Choice3(date);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      _ => throw BadChoice(),
@@ -127,7 +127,7 @@ namespace Choices.Tests
             [Test]
             public void Map1()
             {
-                var c = ChoiceOf3<int, string, DateTime>.Choice1(42);
+                var c = Choice<int, string, DateTime>.Choice1(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map1(x => (char) x)
                               .Match(ch => ch,
@@ -139,7 +139,7 @@ namespace Choices.Tests
             [Test]
             public void Map2()
             {
-                var c = ChoiceOf3<int, string, DateTime>.Choice2("foobar");
+                var c = Choice<int, string, DateTime>.Choice2("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map2(s => s.Length)
                               .Match(_ => throw BadChoice(),
@@ -152,7 +152,7 @@ namespace Choices.Tests
             public void Map3()
             {
                 var date = new DateTime(1970, 1, 1);
-                var c = ChoiceOf3<int, string, DateTime>.Choice3(date);
+                var c = Choice<int, string, DateTime>.Choice3(date);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map3(d => d.Year)
                               .Match(_ => throw BadChoice(),
@@ -167,7 +167,7 @@ namespace Choices.Tests
             [Test]
             public void Choice1()
             {
-                var c = ChoiceOf4<int, string, DateTime, char>.Choice1(42);
+                var c = Choice<int, string, DateTime, char>.Choice1(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(x => x * 2,
                                      _ => throw BadChoice(),
@@ -179,7 +179,7 @@ namespace Choices.Tests
             [Test]
             public void Choice2()
             {
-                var c = ChoiceOf4<int, string, DateTime, char>.Choice2("foobar");
+                var c = Choice<int, string, DateTime, char>.Choice2("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      s => s.ToUpperInvariant(),
@@ -192,7 +192,7 @@ namespace Choices.Tests
             public void Choice3()
             {
                 var date = new DateTime(1970, 1, 1);
-                var c = ChoiceOf4<int, string, DateTime, char>.Choice3(date);
+                var c = Choice<int, string, DateTime, char>.Choice3(date);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      _ => throw BadChoice(),
@@ -204,7 +204,7 @@ namespace Choices.Tests
             [Test]
             public void Choice4()
             {
-                var c = ChoiceOf4<int, string, DateTime, char>.Choice4('4');
+                var c = Choice<int, string, DateTime, char>.Choice4('4');
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(_ => throw BadChoice(),
                                      _ => throw BadChoice(),
@@ -216,7 +216,7 @@ namespace Choices.Tests
             [Test]
             public void Map1()
             {
-                var c = ChoiceOf4<int, string, DateTime, char>.Choice1(42);
+                var c = Choice<int, string, DateTime, char>.Choice1(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map1(x => (char) x)
                               .Match(ch => ch,
@@ -229,7 +229,7 @@ namespace Choices.Tests
             [Test]
             public void Map2()
             {
-                var c = ChoiceOf4<int, string, DateTime, char>.Choice2("foobar");
+                var c = Choice<int, string, DateTime, char>.Choice2("foobar");
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map2(s => s.Length)
                               .Match(_ => throw BadChoice(),
@@ -243,7 +243,7 @@ namespace Choices.Tests
             public void Map3()
             {
                 var date = new DateTime(1970, 1, 1);
-                var c = ChoiceOf4<int, string, DateTime, char>.Choice3(date);
+                var c = Choice<int, string, DateTime, char>.Choice3(date);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map3(d => d.Ticks)
                               .Match(_ => throw BadChoice(),
@@ -256,7 +256,7 @@ namespace Choices.Tests
             [Test]
             public void Map4()
             {
-                var c = ChoiceOf4<int, string, DateTime, char>.Choice4('4');
+                var c = Choice<int, string, DateTime, char>.Choice4('4');
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map4(char.GetUnicodeCategory)
                               .Match(_ => throw BadChoice(),

@@ -20,28 +20,31 @@ namespace Choices.Linq.Right
 
     static partial class RightResult
     {
-        public static ChoiceOf2<T1, TResult>
+        public static Choice<T, TResult> Return<T, TResult>(TResult value) =>
+            Choice<T, TResult>.Choice2(value);
+
+        public static Choice<T1, TResult>
             Bind<T1, T2, TResult>(
-                this ChoiceOf2<T1, T2> choice,
-                Func<T2, ChoiceOf2<T1, TResult>> fun) =>
-            choice.Match(ChoiceOf2<T1, TResult>.Choice1, fun);
+                this Choice<T1, T2> choice,
+                Func<T2, Choice<T1, TResult>> fun) =>
+            choice.Match(Choice<T1, TResult>.Choice1, fun);
 
-        public static ChoiceOf2<T1, TResult>
+        public static Choice<T1, TResult>
             Select<T1, T2, TResult>(
-                this ChoiceOf2<T1, T2> choice,
+                this Choice<T1, T2> choice,
                 Func<T2, TResult> selector) =>
-            choice.Bind(b => ChoiceOf2<T1, TResult>.Choice2(selector(b)));
+            choice.Bind(b => Choice<T1, TResult>.Choice2(selector(b)));
 
-        public static ChoiceOf2<T1, TResult>
+        public static Choice<T1, TResult>
             SelectMany<T1, T2, TResult>(
-                this ChoiceOf2<T1, T2> first,
-                Func<T2, ChoiceOf2<T1, TResult>> secondSelector) =>
+                this Choice<T1, T2> first,
+                Func<T2, Choice<T1, TResult>> secondSelector) =>
             first.Bind(secondSelector);
 
-        public static ChoiceOf2<T1, TResult>
+        public static Choice<T1, TResult>
             SelectMany<T1, T2, T3, TResult>(
-                this ChoiceOf2<T1, T2> first,
-                Func<T2, ChoiceOf2<T1, T3>> secondSelector,
+                this Choice<T1, T2> first,
+                Func<T2, Choice<T1, T3>> secondSelector,
                 Func<T2, T3, TResult> resultSelector) =>
             first.Bind(b1 => secondSelector(b1).Select(b2 => resultSelector(b1, b2)));
     }
@@ -53,28 +56,31 @@ namespace Choices.Linq.Left
 
     static partial class LeftResult
     {
-        public static ChoiceOf2<TResult, T2>
+        public static Choice<TResult, T> Return<TResult, T>(TResult value) =>
+            Choice<TResult, T>.Choice1(value);
+
+        public static Choice<TResult, T2>
             Bind<T1, T2, TResult>(
-                this ChoiceOf2<T1, T2> choice,
-                Func<T1, ChoiceOf2<TResult, T2>> fun) =>
-            choice.Match(fun, ChoiceOf2<TResult, T2>.Choice2);
+                this Choice<T1, T2> choice,
+                Func<T1, Choice<TResult, T2>> fun) =>
+            choice.Match(fun, Choice<TResult, T2>.Choice2);
 
-        public static ChoiceOf2<TResult, T2>
+        public static Choice<TResult, T2>
             Select<T1, T2, TResult>(
-                this ChoiceOf2<T1, T2> choice,
+                this Choice<T1, T2> choice,
                 Func<T1, TResult> selector) =>
-            choice.Bind(a => ChoiceOf2<TResult, T2>.Choice1(selector(a)));
+            choice.Bind(a => Choice<TResult, T2>.Choice1(selector(a)));
 
-        public static ChoiceOf2<TResult, T2>
+        public static Choice<TResult, T2>
             SelectMany<T1, T2, TResult>(
-                this ChoiceOf2<T1, T2> first,
-                Func<T1, ChoiceOf2<TResult, T2>> secondSelector) =>
+                this Choice<T1, T2> first,
+                Func<T1, Choice<TResult, T2>> secondSelector) =>
             first.Bind(secondSelector);
 
-        public static ChoiceOf2<TResult, T2>
+        public static Choice<TResult, T2>
             SelectMany<T1, T2, T3, TResult>(
-                this ChoiceOf2<T1, T2> first,
-                Func<T1, ChoiceOf2<T3, T2>> secondSelector,
+                this Choice<T1, T2> first,
+                Func<T1, Choice<T3, T2>> secondSelector,
                 Func<T1, T3, TResult> resultSelector) =>
             first.Bind(a1 => secondSelector(a1).Select(a2 => resultSelector(a1, a2)));
     }
