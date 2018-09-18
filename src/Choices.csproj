@@ -3,6 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Copyright>Copyright © 2015 Atif Aziz. All rights reserved.</Copyright>
+    <Description>A .NET Standard library of choice (general discriminated union) types.</Description>
+    <Authors>Atif Aziz</Authors>
+    <Owners>Atif Aziz</Owners>
+    <PackageProjectUrl>https://github.com/atifaziz/Choices</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/atifaziz/Choices.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>choice;choices;either;result;union;monad;linq;fp;functional</PackageTags>
+    <PackageLicenseUrl>https://github.com/atifaziz/Choices/blob/master/COPYING.txt</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
