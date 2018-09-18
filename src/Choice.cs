@@ -101,6 +101,9 @@ namespace Choices
                          Choice<T1, T2, T3, TResult>.Choice2,
                          Choice<T1, T2, T3, TResult>.Choice3,
                          x => Choice<T1, T2, T3, TResult>.Choice4(selector(x)));
+
+        internal static string ToString<T>(T value) =>
+            value?.ToString() ?? string.Empty;
     }
 
     abstract partial class Choice<T>
@@ -108,13 +111,19 @@ namespace Choices
         public static Choice<T> Choice1(T value) => new FirstChoice(value);
 
         public abstract TResult Match<TResult>(Func<T, TResult> first);
+        public abstract override string ToString();
 
         sealed class FirstChoice : Choice<T>
         {
             readonly T _value;
+
             public FirstChoice(T value) => _value = value;
+
             public override TResult Match<TResult>(Func<T, TResult> first) =>
                 first(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
     }
 
@@ -124,21 +133,32 @@ namespace Choices
         public static Choice<T1, T2> Choice2(T2 value) => new SecondChoice(value);
 
         public abstract TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second);
+        public abstract override string ToString();
 
         sealed class FirstChoice : Choice<T1, T2>
         {
             readonly T1 _value;
+
             public FirstChoice(T1 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second) =>
                 first(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
 
         sealed class SecondChoice : Choice<T1, T2>
         {
             readonly T2 _value;
+
             public SecondChoice(T2 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second) =>
                 second(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
     }
 
@@ -153,28 +173,45 @@ namespace Choices
             Func<T2, TResult> second,
             Func<T3, TResult> third);
 
+        public abstract override string ToString();
+
         sealed class FirstChoice : Choice<T1, T2, T3>
         {
             readonly T1 _value;
+
             public FirstChoice(T1 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third) =>
                 first(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
 
         sealed class SecondChoice : Choice<T1, T2, T3>
         {
             readonly T2 _value;
+
             public SecondChoice(T2 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third) =>
                 second(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
 
         sealed class ThirdChoice : Choice<T1, T2, T3>
         {
             readonly T3 _value;
+
             public ThirdChoice(T3 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third) =>
                 third(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
     }
 
@@ -191,36 +228,58 @@ namespace Choices
             Func<T3, TResult> third,
             Func<T4, TResult> fourth);
 
+        public abstract override string ToString();
+
         sealed class FirstChoice : Choice<T1, T2, T3, T4>
         {
             readonly T1 _value;
+
             public FirstChoice(T1 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth) =>
                 first(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
 
         sealed class SecondChoice : Choice<T1, T2, T3, T4>
         {
             readonly T2 _value;
+
             public SecondChoice(T2 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth) =>
                 second(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
 
         sealed class ThirdChoice : Choice<T1, T2, T3, T4>
         {
             readonly T3 _value;
+
             public ThirdChoice(T3 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth) =>
                 third(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
 
         sealed class FourthChoice : Choice<T1, T2, T3, T4>
         {
             readonly T4 _value;
+
             public FourthChoice(T4 value) => _value = value;
+
             public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth) =>
                 fourth(_value);
+
+            public override string ToString() =>
+                Choice.ToString(_value);
         }
     }
 }

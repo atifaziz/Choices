@@ -41,6 +41,14 @@ namespace Choices.Tests
                 var result = c.Map(x => (char) x).Match(ch => ch);
                 Assert.That(result, Is.EqualTo('*'));
             }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void ToString(string input, string expected)
+            {
+                var actual = Choice<string>.Choice1(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
+            }
         }
 
         public class ChoiceOf2
@@ -85,6 +93,22 @@ namespace Choices.Tests
                               .Match(_ => throw BadChoice(),
                                      x => x);
                 Assert.That(result, Is.EqualTo(6));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice1ToString(string input, string expected)
+            {
+                var actual = Choice<string, string>.Choice1(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice2ToString(string input, string expected)
+            {
+                var actual = Choice<string, string>.Choice2(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
             }
         }
 
@@ -159,6 +183,30 @@ namespace Choices.Tests
                                      _ => throw BadChoice(),
                                      x => x);
                 Assert.That(result, Is.EqualTo(1970));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice1ToString(string input, string expected)
+            {
+                var actual = Choice<string, string, string>.Choice1(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice2ToString(string input, string expected)
+            {
+                var actual = Choice<string, string, string>.Choice2(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice3ToString(string input, string expected)
+            {
+                var actual = Choice<string, string, string>.Choice3(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
             }
         }
 
@@ -264,6 +312,38 @@ namespace Choices.Tests
                                      _ => throw BadChoice(),
                                      u => u);
                 Assert.That(result, Is.EqualTo(UnicodeCategory.DecimalDigitNumber));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice1ToString(string input, string expected)
+            {
+                var actual = Choice<string, string, string, string>.Choice1(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice2ToString(string input, string expected)
+            {
+                var actual = Choice<string, string, string, string>.Choice2(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice3ToString(string input, string expected)
+            {
+                var actual = Choice<string, string, string, string>.Choice3(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+
+            [TestCase("foobar", "foobar")]
+            [TestCase(null, "")]
+            public void Choice4ToString(string input, string expected)
+            {
+                var actual = Choice<string, string, string, string>.Choice4(input).ToString();
+                Assert.That(actual, Is.EqualTo(expected));
             }
         }
 
