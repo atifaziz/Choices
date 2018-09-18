@@ -27,27 +27,48 @@ namespace Choices.Linq.Right
         public static IChoice<T1, TResult>
             Bind<T1, T2, TResult>(
                 this IChoice<T1, T2> choice,
-                Func<T2, IChoice<T1, TResult>> fun) =>
-            choice.Match(Choice1<T1, TResult>, fun);
+                Func<T2, IChoice<T1, TResult>> fun)
+        {
+            if (choice == null) throw new ArgumentNullException(nameof(choice));
+            if (fun == null) throw new ArgumentNullException(nameof(fun));
+
+            return choice.Match(Choice1<T1, TResult>, fun);
+        }
 
         public static IChoice<T1, TResult>
             Select<T1, T2, TResult>(
                 this IChoice<T1, T2> choice,
-                Func<T2, TResult> selector) =>
-            choice.Bind(b => Choice2<T1, TResult>(selector(b)));
+                Func<T2, TResult> selector)
+        {
+            if (choice == null) throw new ArgumentNullException(nameof(choice));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            return choice.Bind(b => Choice2<T1, TResult>(selector(b)));
+        }
 
         public static IChoice<T1, TResult>
             SelectMany<T1, T2, TResult>(
                 this IChoice<T1, T2> first,
-                Func<T2, IChoice<T1, TResult>> secondSelector) =>
-            first.Bind(secondSelector);
+                Func<T2, IChoice<T1, TResult>> secondSelector)
+        {
+            if (first == null) throw new ArgumentNullException(nameof(first));
+            if (secondSelector == null) throw new ArgumentNullException(nameof(secondSelector));
+
+            return first.Bind(secondSelector);
+        }
 
         public static IChoice<T1, TResult>
             SelectMany<T1, T2, T3, TResult>(
                 this IChoice<T1, T2> first,
                 Func<T2, IChoice<T1, T3>> secondSelector,
-                Func<T2, T3, TResult> resultSelector) =>
-            first.Bind(b1 => secondSelector(b1).Select(b2 => resultSelector(b1, b2)));
+                Func<T2, T3, TResult> resultSelector)
+        {
+            if (first == null) throw new ArgumentNullException(nameof(first));
+            if (secondSelector == null) throw new ArgumentNullException(nameof(secondSelector));
+            if (resultSelector == null) throw new ArgumentNullException(nameof(resultSelector));
+
+            return first.Bind(b1 => secondSelector(b1).Select(b2 => resultSelector(b1, b2)));
+        }
     }
 }
 
@@ -64,26 +85,47 @@ namespace Choices.Linq.Left
         public static IChoice<TResult, T2>
             Bind<T1, T2, TResult>(
                 this IChoice<T1, T2> choice,
-                Func<T1, IChoice<TResult, T2>> fun) =>
-            choice.Match(fun, Choice2<TResult, T2>);
+                Func<T1, IChoice<TResult, T2>> fun)
+        {
+            if (choice == null) throw new ArgumentNullException(nameof(choice));
+            if (fun == null) throw new ArgumentNullException(nameof(fun));
+
+            return choice.Match(fun, Choice2<TResult, T2>);
+        }
 
         public static IChoice<TResult, T2>
             Select<T1, T2, TResult>(
                 this IChoice<T1, T2> choice,
-                Func<T1, TResult> selector) =>
-            choice.Bind(a => Choice1<TResult, T2>(selector(a)));
+                Func<T1, TResult> selector)
+        {
+            if (choice == null) throw new ArgumentNullException(nameof(choice));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            return choice.Bind(a => Choice1<TResult, T2>(selector(a)));
+        }
 
         public static IChoice<TResult, T2>
             SelectMany<T1, T2, TResult>(
                 this IChoice<T1, T2> first,
-                Func<T1, IChoice<TResult, T2>> secondSelector) =>
-            first.Bind(secondSelector);
+                Func<T1, IChoice<TResult, T2>> secondSelector)
+        {
+            if (first == null) throw new ArgumentNullException(nameof(first));
+            if (secondSelector == null) throw new ArgumentNullException(nameof(secondSelector));
+
+            return first.Bind(secondSelector);
+        }
 
         public static IChoice<TResult, T2>
             SelectMany<T1, T2, T3, TResult>(
                 this IChoice<T1, T2> first,
                 Func<T1, IChoice<T3, T2>> secondSelector,
-                Func<T1, T3, TResult> resultSelector) =>
-            first.Bind(a1 => secondSelector(a1).Select(a2 => resultSelector(a1, a2)));
+                Func<T1, T3, TResult> resultSelector)
+        {
+            if (first == null) throw new ArgumentNullException(nameof(first));
+            if (secondSelector == null) throw new ArgumentNullException(nameof(secondSelector));
+            if (resultSelector == null) throw new ArgumentNullException(nameof(resultSelector));
+
+            return first.Bind(a1 => secondSelector(a1).Select(a2 => resultSelector(a1, a2)));
+        }
     }
 }
