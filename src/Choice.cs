@@ -107,14 +107,14 @@ namespace Choices
     {
         public static ChoiceOf1<T> Choice1(T value) => new Choice1Of1(value);
 
-        public abstract TResult Match<TResult>(Func<T, TResult> selector);
+        public abstract TResult Match<TResult>(Func<T, TResult> first);
 
         sealed class Choice1Of1 : ChoiceOf1<T>
         {
             readonly T _value;
             public Choice1Of1(T value) { _value = value; }
-            public override TResult Match<TResult>(Func<T, TResult> selector) =>
-                selector(_value);
+            public override TResult Match<TResult>(Func<T, TResult> first) =>
+                first(_value);
         }
     }
 
@@ -123,22 +123,22 @@ namespace Choices
         public static ChoiceOf2<T1, T2> Choice1(T1 value) => new Choice1Of2(value);
         public static ChoiceOf2<T1, T2> Choice2(T2 value) => new Choice2Of2(value);
 
-        public abstract TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2);
+        public abstract TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second);
 
         sealed class Choice1Of2 : ChoiceOf2<T1, T2>
         {
             readonly T1 _value;
             public Choice1Of2(T1 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2) =>
-                selector1(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second) =>
+                first(_value);
         }
 
         sealed class Choice2Of2 : ChoiceOf2<T1, T2>
         {
             readonly T2 _value;
             public Choice2Of2(T2 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2) =>
-                selector2(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second) =>
+                second(_value);
         }
     }
 
@@ -149,32 +149,32 @@ namespace Choices
         public static ChoiceOf3<T1, T2, T3> Choice3(T3 value) => new Choice3Of3(value);
 
         public abstract TResult Match<TResult>(
-            Func<T1, TResult> selector1,
-            Func<T2, TResult> selector2,
-            Func<T3, TResult> selector3);
+            Func<T1, TResult> first,
+            Func<T2, TResult> second,
+            Func<T3, TResult> third);
 
         sealed class Choice1Of3 : ChoiceOf3<T1, T2, T3>
         {
             readonly T1 _value;
             public Choice1Of3(T1 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2, Func<T3, TResult> selector3) =>
-                selector1(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third) =>
+                first(_value);
         }
 
         sealed class Choice2Of3 : ChoiceOf3<T1, T2, T3>
         {
             readonly T2 _value;
             public Choice2Of3(T2 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2, Func<T3, TResult> selector3) =>
-                selector2(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third) =>
+                second(_value);
         }
 
         sealed class Choice3Of3 : ChoiceOf3<T1, T2, T3>
         {
             readonly T3 _value;
             public Choice3Of3(T3 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2, Func<T3, TResult> selector3) =>
-                selector3(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third) =>
+                third(_value);
         }
     }
 
@@ -186,41 +186,41 @@ namespace Choices
         public static ChoiceOf4<T1, T2, T3, T4> Choice4(T4 value) => new Choice4Of4(value);
 
         public abstract TResult Match<TResult>(
-            Func<T1, TResult> selector1,
-            Func<T2, TResult> selector2,
-            Func<T3, TResult> selector3,
-            Func<T4, TResult> selector4);
+            Func<T1, TResult> first,
+            Func<T2, TResult> second,
+            Func<T3, TResult> third,
+            Func<T4, TResult> fourth);
 
         sealed class Choice1Of4 : ChoiceOf4<T1, T2, T3, T4>
         {
             readonly T1 _value;
             public Choice1Of4(T1 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2, Func<T3, TResult> selector3, Func<T4, TResult> selector4) =>
-                selector1(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth) =>
+                first(_value);
         }
 
         sealed class Choice2Of4 : ChoiceOf4<T1, T2, T3, T4>
         {
             readonly T2 _value;
             public Choice2Of4(T2 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2, Func<T3, TResult> selector3, Func<T4, TResult> selector4) =>
-                selector2(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth) =>
+                second(_value);
         }
 
         sealed class Choice3Of4 : ChoiceOf4<T1, T2, T3, T4>
         {
             readonly T3 _value;
             public Choice3Of4(T3 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2, Func<T3, TResult> selector3, Func<T4, TResult> selector4) =>
-                selector3(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth) =>
+                third(_value);
         }
 
         sealed class Choice4Of4 : ChoiceOf4<T1, T2, T3, T4>
         {
             readonly T4 _value;
             public Choice4Of4(T4 value) { _value = value; }
-            public override TResult Match<TResult>(Func<T1, TResult> selector1, Func<T2, TResult> selector2, Func<T3, TResult> selector3, Func<T4, TResult> selector4) =>
-                selector4(_value);
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth) =>
+                fourth(_value);
         }
     }
 }
