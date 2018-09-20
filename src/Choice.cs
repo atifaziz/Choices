@@ -26,20 +26,20 @@ namespace Choices
         TResult Match<TResult>(Func<T, TResult> first);
     }
 
-    public partial interface IChoice<out T1, out T2>
+    partial interface IChoice<out T1, out T2>
     {
         TResult Match<TResult>(Func<T1, TResult> first,
                                Func<T2, TResult> second);
     }
 
-    public partial interface IChoice<out T1, out T2, out T3>
+    partial interface IChoice<out T1, out T2, out T3>
     {
         TResult Match<TResult>(Func<T1, TResult> first,
                                Func<T2, TResult> second,
                                Func<T3, TResult> third);
     }
 
-    public partial interface IChoice<out T1, out T2, out T3, out T4>
+    partial interface IChoice<out T1, out T2, out T3, out T4>
     {
         TResult Match<TResult>(Func<T1, TResult> first,
                                Func<T2, TResult> second,
