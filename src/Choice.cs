@@ -26,7 +26,6 @@ namespace Choices
     {
         static partial class New
         {
-            public static Choice<T>              Choice1<T>             (T  value) => Choice<T>             .Choice1(value);
             public static Choice<T1, T2>         Choice1<T1, T2>        (T1 value) => Choice<T1, T2>        .Choice1(value);
             public static Choice<T1, T2>         Choice2<T1, T2>        (T2 value) => Choice<T1, T2>        .Choice2(value);
             public static Choice<T1, T2, T3>     Choice1<T1, T2, T3>    (T1 value) => Choice<T1, T2, T3>    .Choice1(value);
@@ -70,18 +69,18 @@ namespace Choices
                              Choice4<T1, T2, T3, T4>);
         }
 
-        public static Func<Choice<T>, TResult> When1<T, TResult>(Func<T, TResult> selector)
+        public static WhenPartial<T, TResult> When1<T, TResult>(Func<T, TResult> selector)
         {
             if (selector == null) throw new ArgumentNullException(nameof(selector));
-            return choice => choice.Match(selector);
+            return new WhenPartial<T, TResult>(selector);
         }
 
-        public static Func<Choice<T1, T2>, TResult> When2<T1, T2, TResult>(this Func<Choice<T1>, TResult> otherwise, Func<T2, TResult> selector)
+        public static Func<Choice<T1, T2>, TResult> When2<T1, T2, TResult>(this WhenPartial<T1, TResult> otherwise, Func<T2, TResult> selector)
         {
             if (otherwise == null) throw new ArgumentNullException(nameof(otherwise));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
 
-            return choice => choice.Match(first => otherwise(Choice1(first)), selector);
+            return choice => choice.Match(otherwise.First, selector);
         }
 
         public static Func<Choice<T1, T2, T3>, TResult> When3<T1, T2, T3, TResult>(this Func<Choice<T1, T2>, TResult> otherwise, Func<T3, TResult> selector)
@@ -105,14 +104,6 @@ namespace Choices
                              second => otherwise(Choice2<T1, T2, T3>(second)),
                              third  => otherwise(Choice3<T1, T2, T3>(third)),
                              selector);
-        }
-
-        public static Choice<TResult> Map<T, TResult>(this Choice<T> choice, Func<T, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
-            return choice.Match(x => Choice1(selector(x)));
         }
 
         public static Choice<TResult, T2> Map1<T1, T2, TResult>(this Choice<T1, T2> choice, Func<T1, TResult> selector)
@@ -215,6 +206,13 @@ namespace Choices
             value?.ToString() ?? string.Empty;
     }
 
+    sealed partial class WhenPartial<T, TResult>
+    {
+        internal readonly Func<T, TResult> First;
+        public WhenPartial(Func<T, TResult> first) =>
+            First = first ?? throw new ArgumentNullException(nameof(first));
+    }
+
     static class EqualityComparer
     {
         public static int GetHashCode<T>(T value) =>
@@ -223,39 +221,6 @@ namespace Choices
         public static bool Equals<T>(T x, T y) =>
             EqualityComparer<T>.Default.Equals(x, y);
     }
-
-    abstract partial class Choice<T> : IEquatable<Choice<T>>
-    {
-        internal static Choice<T> Choice1(T value) => new Choice1Of1(value);
-
-        public abstract TResult Match<TResult>(Func<T, TResult> first);
-
-        public abstract override int GetHashCode();
-        public abstract override bool Equals(object obj);
-        public abstract bool Equals(Choice<T> other);
-
-        public abstract override string ToString();
-
-        sealed partial class Choice1Of1 : Choice<T>
-        {
-            readonly T _value;
-
-            public Choice1Of1(T value) => _value = value;
-
-            public override TResult Match<TResult>(Func<T, TResult> first)
-            {
-                if (first == null) throw new ArgumentNullException(nameof(first));
-                return first(_value);
-            }
-
-            public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(_value);
-            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-            public override bool Equals(Choice<T> other) => Choice.Equals(this, other, c => c._value);
-
-            public override string ToString() => Choice.ToString(_value);
-        }
-    }
-
 
     abstract partial class Choice<T1, T2> : IEquatable<Choice<T1, T2>>
     {

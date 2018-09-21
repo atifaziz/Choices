@@ -103,10 +103,9 @@ namespace Choices.Tests
         [Test]
         public void When1()
         {
-            var map = Choice.When1((int x) => x * 2);
+            var f = new Func<int, int>(x => x * 2);
+            var map = Choice.When1(f);
             Assert.That(map, Is.Not.Null);
-            var result = map(Choice1(42));
-            Assert.That(result, Is.EqualTo(84));
         }
 
         [Test]

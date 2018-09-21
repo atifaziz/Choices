@@ -16,12 +16,6 @@
 
 namespace Choices
 {
-    partial class Choice<T>
-    {
-        internal object ToDump() =>
-            Match(a => new { Chosen = 1, Value = (object) a });
-    }
-
     partial class Choice<T1, T2>
     {
         internal object ToDump() =>
