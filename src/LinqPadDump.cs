@@ -1,4 +1,4 @@
-﻿#region Copyright (c) 2018 Atif Aziz. All rights reserved.
+#region Copyright (c) 2018 Atif Aziz. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,20 +16,20 @@
 
 namespace Choices
 {
-    abstract partial class Choice<T>
+    partial class Choice<T>
     {
         internal object ToDump() =>
             Match(a => new { Chosen = 1, Value = (object) a });
     }
 
-    abstract partial class Choice<T1, T2>
+    partial class Choice<T1, T2>
     {
         internal object ToDump() =>
             Match(a => new { Chosen = 1, Value = (object) a },
                   b => new { Chosen = 2, Value = (object) b });
     }
 
-    abstract partial class Choice<T1, T2, T3>
+    partial class Choice<T1, T2, T3>
     {
         internal object ToDump() =>
             Match(a => new { Chosen = 1, Value = (object) a },
@@ -37,7 +37,7 @@ namespace Choices
                   c => new { Chosen = 3, Value = (object) c });
     }
 
-    abstract partial class Choice<T1, T2, T3, T4>
+    partial class Choice<T1, T2, T3, T4>
     {
         internal object ToDump() =>
             Match(a => new { Chosen = 1, Value = (object) a },
