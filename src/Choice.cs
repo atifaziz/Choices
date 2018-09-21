@@ -19,6 +19,7 @@
 namespace Choices
 {
     using System;
+    using System.Collections.Generic;
     using static Choice.New;
 
     static partial class Choice
@@ -201,13 +202,36 @@ namespace Choices
                                 x => Choice4<T1, T2, T3, TResult>(selector(x)));
         }
 
+        internal static bool Equals<T1, T2, TValue>(T1 @this, T2 that,
+                                                    Func<T1, TValue> choiceSelector)
+            => that != null
+            && (ReferenceEquals(that, @this)
+                || that is T1 c && EqualityComparer.Equals(choiceSelector(@this), choiceSelector(c)));
+
+        public static int GetHashCode<T, TValue>(T choice, TValue value) =>
+            unchecked((typeof(T).GetHashCode() * 397) ^ EqualityComparer.GetHashCode(value));
+
         internal static string ToString<T>(T value) =>
             value?.ToString() ?? string.Empty;
     }
 
-    abstract partial class Choice<T>
+    static class EqualityComparer
+    {
+        public static int GetHashCode<T>(T value) =>
+            EqualityComparer<T>.Default.GetHashCode(value);
+
+        public static bool Equals<T>(T x, T y) =>
+            EqualityComparer<T>.Default.Equals(x, y);
+    }
+
+    abstract partial class Choice<T> : IEquatable<Choice<T>>
     {
         public abstract TResult Match<TResult>(Func<T, TResult> first);
+
+        public abstract override int GetHashCode();
+        public abstract override bool Equals(object obj);
+        public abstract bool Equals(Choice<T> other);
+
         public abstract override string ToString();
     }
 
@@ -223,13 +247,21 @@ namespace Choices
             return first(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(_value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
-    abstract partial class Choice<T1, T2>
+    abstract partial class Choice<T1, T2> : IEquatable<Choice<T1, T2>>
     {
         public abstract TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second);
+
+        public abstract override int GetHashCode();
+        public abstract override bool Equals(object obj);
+        public abstract bool Equals(Choice<T1, T2> other);
+
         public abstract override string ToString();
     }
 
@@ -247,8 +279,11 @@ namespace Choices
             return first(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
     sealed partial class Choice2Of2<T1, T2> : Choice<T1, T2>
@@ -265,16 +300,23 @@ namespace Choices
             return second(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
-    abstract partial class Choice<T1, T2, T3>
+    abstract partial class Choice<T1, T2, T3> : IEquatable<Choice<T1, T2, T3>>
     {
         public abstract TResult Match<TResult>(
             Func<T1, TResult> first,
             Func<T2, TResult> second,
             Func<T3, TResult> third);
+
+        public abstract override int GetHashCode();
+        public abstract override bool Equals(object obj);
+        public abstract bool Equals(Choice<T1, T2, T3> other);
 
         public abstract override string ToString();
     }
@@ -294,8 +336,11 @@ namespace Choices
             return first(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
     sealed partial class Choice2Of3<T1, T2, T3> : Choice<T1, T2, T3>
@@ -313,8 +358,11 @@ namespace Choices
             return second(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
     sealed partial class Choice3Of3<T1, T2, T3> : Choice<T1, T2, T3>
@@ -332,17 +380,24 @@ namespace Choices
             return third(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
-    abstract partial class Choice<T1, T2, T3, T4>
+    abstract partial class Choice<T1, T2, T3, T4> : IEquatable<Choice<T1, T2, T3, T4>>
     {
         public abstract TResult Match<TResult>(
             Func<T1, TResult> first,
             Func<T2, TResult> second,
             Func<T3, TResult> third,
             Func<T4, TResult> fourth);
+
+        public abstract override int GetHashCode();
+        public abstract override bool Equals(object obj);
+        public abstract bool Equals(Choice<T1, T2, T3, T4> other);
 
         public abstract override string ToString();
     }
@@ -363,8 +418,11 @@ namespace Choices
             return first(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
     sealed partial class Choice2Of4<T1, T2, T3, T4> : Choice<T1, T2, T3, T4>
@@ -383,8 +441,11 @@ namespace Choices
             return second(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
     sealed partial class Choice3Of4<T1, T2, T3, T4> : Choice<T1, T2, T3, T4>
@@ -403,8 +464,11 @@ namespace Choices
             return third(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 
     sealed partial class Choice4Of4<T1, T2, T3, T4> : Choice<T1, T2, T3, T4>
@@ -423,7 +487,10 @@ namespace Choices
             return fourth(_value);
         }
 
-        public override string ToString() =>
-            Choice.ToString(_value);
+        public override int GetHashCode() => Choice.GetHashCode(this, _value);
+        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+        public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
+
+        public override string ToString() => Choice.ToString(_value);
     }
 }

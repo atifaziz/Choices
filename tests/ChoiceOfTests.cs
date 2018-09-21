@@ -50,6 +50,53 @@ namespace Choices.Tests
                 var actual = Choice1<string>(input).ToString();
                 Assert.That(actual, Is.EqualTo(expected));
             }
+
+            public class Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice1<string>("foobar");
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice1<string>("foobar");
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice1<string>("foobar");
+                    var y = Choice1<string>("foobar");
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice1<string>("foobar");
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var foo = Choice1<string>("foo");
+                    var bar = Choice1<string>("bar");
+                    Assert.False(foo.Equals((object) bar));
+                    Assert.False(foo.Equals(bar));
+                }
+            }
         }
 
         public class ChoiceOf2
@@ -64,6 +111,61 @@ namespace Choices.Tests
                 Assert.That(result, Is.EqualTo(84));
             }
 
+            public class Choice1Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice1<int, string>(42);
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice1<int, string>(42);
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice1<int, string>(42);
+                    var y = Choice1<int, string>(42);
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice1Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice1<int, string>(42);
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    var choice1 = Choice1<int, int>(42);
+                    var choice2 = Choice2<int, int>(42);
+                    Assert.False(choice1.Equals(choice2));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var x = Choice1<int, string>(123);
+                    var y = Choice1<int, string>(456);
+                    Assert.False(x.Equals((object) y));
+                    Assert.False(x.Equals(y));
+                }
+            }
+
             [Test]
             public void Choice2()
             {
@@ -72,6 +174,61 @@ namespace Choices.Tests
                 var result = c.Match(_ => throw BadChoice(),
                                      s => s.ToUpperInvariant());
                 Assert.That(result, Is.EqualTo("FOOBAR"));
+            }
+
+            public class Choice2Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice2<int, string>("foobar");
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice2<int, string>("foobar");
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice2<int, string>("foobar");
+                    var y = Choice2<int, string>("foobar");
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice2Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice2<int, string>("foobar");
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice1()
+                {
+                    var choice2 = Choice2<string, string>("foobar");
+                    var choice1 = Choice1<string, string>("foobar");
+                    Assert.False(choice2.Equals(choice1));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var foo = Choice2<int, string>("foo");
+                    var bar = Choice2<int, string>("bar");
+                    Assert.False(foo.Equals((object) bar));
+                    Assert.False(foo.Equals(bar));
+                }
             }
 
             [Test]
@@ -126,6 +283,69 @@ namespace Choices.Tests
                 Assert.That(result, Is.EqualTo(84));
             }
 
+            public class Choice1Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice1<int, string, DateTime>(42);
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice1<int, string, DateTime>(42);
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice1<int, string, DateTime>(42);
+                    var y = Choice1<int, string, DateTime>(42);
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice1Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice1<int, string, DateTime>(42);
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    var choice1 = Choice1<int, int, int>(42);
+                    var choice2 = Choice2<int, int, int>(42);
+                    Assert.False(choice1.Equals(choice2));
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    var choice1 = Choice1<int, int, int>(42);
+                    var choice3 = Choice3<int, int, int>(42);
+                    Assert.False(choice1.Equals(choice3));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var x = Choice1<int, string, DateTime>(123);
+                    var y = Choice1<int, string, DateTime>(456);
+                    Assert.False(x.Equals((object) y));
+                    Assert.False(x.Equals(y));
+                }
+            }
+
             [Test]
             public void Choice2()
             {
@@ -135,6 +355,69 @@ namespace Choices.Tests
                                      s => s.ToUpperInvariant(),
                                      _ => throw BadChoice());
                 Assert.That(result, Is.EqualTo("FOOBAR"));
+            }
+
+            public class Choice2Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice2<int, string, DateTime>("foobar");
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice2<int, string, DateTime>("foobar");
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice2<int, string, DateTime>("foobar");
+                    var y = Choice2<int, string, DateTime>("foobar");
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice2Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice2<int, string, DateTime>("foobar");
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice1()
+                {
+                    var choice2 = Choice2<int, int, int>(42);
+                    var choice1 = Choice1<int, int, int>(42);
+                    Assert.False(choice2.Equals(choice1));
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    var choice2 = Choice2<int, int, int>(42);
+                    var choice3 = Choice1<int, int, int>(42);
+                    Assert.False(choice2.Equals(choice3));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var foo = Choice2<int, string, DateTime>("foo");
+                    var bar = Choice2<int, string, DateTime>("bar");
+                    Assert.False(foo.Equals((object) bar));
+                    Assert.False(foo.Equals(bar));
+                }
             }
 
             [Test]
@@ -147,6 +430,74 @@ namespace Choices.Tests
                                      _ => throw BadChoice(),
                                      d => d.Ticks);
                 Assert.That(result, Is.EqualTo(date.Ticks));
+            }
+
+            public class Choice3Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var choice = Choice3<int, string, DateTime>(date);
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var choice = Choice3<int, string, DateTime>(date);
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var x = Choice3<int, string, DateTime>(date);
+                    var y = Choice3<int, string, DateTime>(date);
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice3Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var choice = Choice3<int, string, DateTime>(date);
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice1()
+                {
+                    var choice3 = Choice3<int, int, int>(42);
+                    var choice1 = Choice1<int, int, int>(42);
+                    Assert.False(choice3.Equals(choice1));
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    var choice3 = Choice3<int, int, int>(42);
+                    var choice2 = Choice1<int, int, int>(42);
+                    Assert.False(choice3.Equals(choice2));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var a = Choice3<int, string, DateTime>(date);
+                    var b = Choice3<int, string, DateTime>(date.AddYears((1)));
+                    Assert.False(a.Equals((object) b));
+                    Assert.False(a.Equals(b));
+                }
             }
 
             [Test]
@@ -225,6 +576,77 @@ namespace Choices.Tests
                 Assert.That(result, Is.EqualTo(84));
             }
 
+            public class Choice1Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice1<int, string, DateTime, char>(42);
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice1<int, string, DateTime, char>(42);
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice1<int, string, DateTime, char>(42);
+                    var y = Choice1<int, string, DateTime, char>(42);
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice1Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice1<int, string, DateTime, char>(42);
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    var choice1 = Choice1<int, int, int, int>(42);
+                    var choice2 = Choice2<int, int, int, int>(42);
+                    Assert.False(choice1.Equals(choice2));
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    var choice1 = Choice1<int, int, int, int>(42);
+                    var choice3 = Choice3<int, int, int, int>(42);
+                    Assert.False(choice1.Equals(choice3));
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    var choice1 = Choice1<int, int, int, int>(42);
+                    var choice4 = Choice4<int, int, int, int>(42);
+                    Assert.False(choice1.Equals(choice4));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var x = Choice1<int, string, DateTime, char>(123);
+                    var y = Choice1<int, string, DateTime, char>(456);
+                    Assert.False(x.Equals((object) y));
+                    Assert.False(x.Equals(y));
+                }
+            }
+
             [Test]
             public void Choice2()
             {
@@ -235,6 +657,77 @@ namespace Choices.Tests
                                      _ => throw BadChoice(),
                                      _ => throw BadChoice());
                 Assert.That(result, Is.EqualTo("FOOBAR"));
+            }
+
+            public class Choice2Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice2<int, string, DateTime, char>("foobar");
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice2<int, string, DateTime, char>("foobar");
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice2<int, string, DateTime, char>("foobar");
+                    var y = Choice2<int, string, DateTime, char>("foobar");
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice2Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice2<int, string, DateTime, char>("foobar");
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice1()
+                {
+                    var choice2 = Choice2<int, int, int, int>(42);
+                    var choice1 = Choice1<int, int, int, int>(42);
+                    Assert.False(choice2.Equals(choice1));
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    var choice2 = Choice2<int, int, int, int>(42);
+                    var choice3 = Choice3<int, int, int, int>(42);
+                    Assert.False(choice2.Equals(choice3));
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    var choice2 = Choice2<int, int, int, int>(42);
+                    var choice4 = Choice4<int, int, int, int>(42);
+                    Assert.False(choice2.Equals(choice4));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var x = Choice2<int, string, DateTime, char>("foo");
+                    var y = Choice2<int, string, DateTime, char>("bar");
+                    Assert.False(x.Equals((object) y));
+                    Assert.False(x.Equals(y));
+                }
             }
 
             [Test]
@@ -250,6 +743,82 @@ namespace Choices.Tests
                 Assert.That(result, Is.EqualTo(date.Ticks));
             }
 
+            public class Choice3Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var choice = Choice3<int, string, DateTime, char>(date);
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var choice = Choice3<int, string, DateTime, char>(date);
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var x = Choice3<int, string, DateTime, char>(date);
+                    var y = Choice3<int, string, DateTime, char>(date);
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice3Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var choice = Choice3<int, string, DateTime, char>(date);
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice1()
+                {
+                    var choice3 = Choice3<int, int, int, int>(42);
+                    var choice1 = Choice1<int, int, int, int>(42);
+                    Assert.False(choice3.Equals(choice1));
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    var choice3 = Choice3<int, int, int, int>(42);
+                    var choice2 = Choice2<int, int, int, int>(42);
+                    Assert.False(choice3.Equals(choice2));
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    var choice3 = Choice3<int, int, int, int>(42);
+                    var choice4 = Choice4<int, int, int, int>(42);
+                    Assert.False(choice3.Equals(choice4));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var date = new DateTime(1970, 1, 1);
+                    var x = Choice3<int, string, DateTime, char>(date);
+                    var y = Choice3<int, string, DateTime, char>(date.AddYears(1));
+                    Assert.False(x.Equals((object) y));
+                    Assert.False(x.Equals(y));
+                }
+            }
+
             [Test]
             public void Choice4()
             {
@@ -260,6 +829,77 @@ namespace Choices.Tests
                                      _ => throw BadChoice(),
                                      char.GetUnicodeCategory);
                 Assert.That(result, Is.EqualTo(UnicodeCategory.DecimalDigitNumber));
+            }
+
+            public class Choice4Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice4<int, string, DateTime, char>('*');
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice4<int, string, DateTime, char>('*');
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice4<int, string, DateTime, char>('*');
+                    var y = Choice4<int, string, DateTime, char>('*');
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice4Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice4<int, string, DateTime, char>('*');
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void Choice1()
+                {
+                    var choice4 = Choice4<int, int, int, int>(42);
+                    var choice1 = Choice1<int, int, int, int>(42);
+                    Assert.False(choice4.Equals(choice1));
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    var choice4 = Choice4<int, int, int, int>(42);
+                    var choice2 = Choice2<int, int, int, int>(42);
+                    Assert.False(choice4.Equals(choice2));
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    var choice4 = Choice4<int, int, int, int>(42);
+                    var choice3 = Choice3<int, int, int, int>(42);
+                    Assert.False(choice4.Equals(choice3));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var x = Choice4<int, string, DateTime, char>('*');
+                    var y = Choice4<int, string, DateTime, char>('!');
+                    Assert.False(x.Equals((object) y));
+                    Assert.False(x.Equals(y));
+                }
             }
 
             [Test]
