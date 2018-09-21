@@ -26,16 +26,16 @@ namespace Choices
     {
         static partial class New
         {
-            public static Choice<T>              Choice1<T>             (T  value) => new Choice1Of1<T>             (value);
-            public static Choice<T1, T2>         Choice1<T1, T2>        (T1 value) => new Choice1Of2<T1, T2>        (value);
-            public static Choice<T1, T2>         Choice2<T1, T2>        (T2 value) => new Choice2Of2<T1, T2>        (value);
-            public static Choice<T1, T2, T3>     Choice1<T1, T2, T3>    (T1 value) => new Choice1Of3<T1, T2, T3>    (value);
-            public static Choice<T1, T2, T3>     Choice2<T1, T2, T3>    (T2 value) => new Choice2Of3<T1, T2, T3>    (value);
-            public static Choice<T1, T2, T3>     Choice3<T1, T2, T3>    (T3 value) => new Choice3Of3<T1, T2, T3>    (value);
-            public static Choice<T1, T2, T3, T4> Choice1<T1, T2, T3, T4>(T1 value) => new Choice1Of4<T1, T2, T3, T4>(value);
-            public static Choice<T1, T2, T3, T4> Choice2<T1, T2, T3, T4>(T2 value) => new Choice2Of4<T1, T2, T3, T4>(value);
-            public static Choice<T1, T2, T3, T4> Choice3<T1, T2, T3, T4>(T3 value) => new Choice3Of4<T1, T2, T3, T4>(value);
-            public static Choice<T1, T2, T3, T4> Choice4<T1, T2, T3, T4>(T4 value) => new Choice4Of4<T1, T2, T3, T4>(value);
+            public static Choice<T>              Choice1<T>             (T  value) => Choice<T>             .Choice1(value);
+            public static Choice<T1, T2>         Choice1<T1, T2>        (T1 value) => Choice<T1, T2>        .Choice1(value);
+            public static Choice<T1, T2>         Choice2<T1, T2>        (T2 value) => Choice<T1, T2>        .Choice2(value);
+            public static Choice<T1, T2, T3>     Choice1<T1, T2, T3>    (T1 value) => Choice<T1, T2, T3>    .Choice1(value);
+            public static Choice<T1, T2, T3>     Choice2<T1, T2, T3>    (T2 value) => Choice<T1, T2, T3>    .Choice2(value);
+            public static Choice<T1, T2, T3>     Choice3<T1, T2, T3>    (T3 value) => Choice<T1, T2, T3>    .Choice3(value);
+            public static Choice<T1, T2, T3, T4> Choice1<T1, T2, T3, T4>(T1 value) => Choice<T1, T2, T3, T4>.Choice1(value);
+            public static Choice<T1, T2, T3, T4> Choice2<T1, T2, T3, T4>(T2 value) => Choice<T1, T2, T3, T4>.Choice2(value);
+            public static Choice<T1, T2, T3, T4> Choice3<T1, T2, T3, T4>(T3 value) => Choice<T1, T2, T3, T4>.Choice3(value);
+            public static Choice<T1, T2, T3, T4> Choice4<T1, T2, T3, T4>(T4 value) => Choice<T1, T2, T3, T4>.Choice4(value);
         }
 
         public static Choice<T1, T2> If<T1, T2>(bool flag, Func<T1> t, Func<T2> f)
@@ -226,6 +226,8 @@ namespace Choices
 
     abstract partial class Choice<T> : IEquatable<Choice<T>>
     {
+        internal static Choice<T> Choice1(T value) => new Choice1Of1(value);
+
         public abstract TResult Match<TResult>(Func<T, TResult> first);
 
         public abstract override int GetHashCode();
@@ -233,29 +235,33 @@ namespace Choices
         public abstract bool Equals(Choice<T> other);
 
         public abstract override string ToString();
-    }
 
-    sealed partial class Choice1Of1<T> : Choice<T>
-    {
-        readonly T _value;
-
-        public Choice1Of1(T value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T, TResult> first)
+        sealed partial class Choice1Of1 : Choice<T>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            return first(_value);
+            readonly T _value;
+
+            public Choice1Of1(T value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T, TResult> first)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                return first(_value);
+            }
+
+            public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(_value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
-
-        public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(_value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
     }
+
 
     abstract partial class Choice<T1, T2> : IEquatable<Choice<T1, T2>>
     {
+        internal static Choice<T1, T2> Choice1(T1 value) => new Choice1Of2(value);
+        internal static Choice<T1, T2> Choice2(T2 value) => new Choice2Of2(value);
+
         public abstract TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second);
 
         public abstract override int GetHashCode();
@@ -263,52 +269,56 @@ namespace Choices
         public abstract bool Equals(Choice<T1, T2> other);
 
         public abstract override string ToString();
-    }
 
-    sealed partial class Choice1Of2<T1, T2> : Choice<T1, T2>
-    {
-        readonly T1 _value;
-
-        public Choice1Of2(T1 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second)
+        sealed partial class Choice1Of2 : Choice<T1, T2>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
+            readonly T1 _value;
 
-            return first(_value);
+            public Choice1Of2(T1 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+
+                return first(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
 
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
-    }
-
-    sealed partial class Choice2Of2<T1, T2> : Choice<T1, T2>
-    {
-        readonly T2 _value;
-
-        public Choice2Of2(T2 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second)
+        sealed partial class Choice2Of2 : Choice<T1, T2>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
+            readonly T2 _value;
 
-            return second(_value);
+            public Choice2Of2(T2 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+
+                return second(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
-
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
     }
 
     abstract partial class Choice<T1, T2, T3> : IEquatable<Choice<T1, T2, T3>>
     {
+        internal static Choice<T1, T2, T3> Choice1(T1 value) => new Choice1Of3(value);
+        internal static Choice<T1, T2, T3> Choice2(T2 value) => new Choice2Of3(value);
+        internal static Choice<T1, T2, T3> Choice3(T3 value) => new Choice3Of3(value);
+
         public abstract TResult Match<TResult>(
             Func<T1, TResult> first,
             Func<T2, TResult> second,
@@ -319,76 +329,82 @@ namespace Choices
         public abstract bool Equals(Choice<T1, T2, T3> other);
 
         public abstract override string ToString();
-    }
 
-    sealed partial class Choice1Of3<T1, T2, T3> : Choice<T1, T2, T3>
-    {
-        readonly T1 _value;
-
-        public Choice1Of3(T1 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third)
+        sealed partial class Choice1Of3 : Choice<T1, T2, T3>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
-            if (third == null) throw new ArgumentNullException(nameof(third));
+            readonly T1 _value;
 
-            return first(_value);
+            public Choice1Of3(T1 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+                if (third == null) throw new ArgumentNullException(nameof(third));
+
+                return first(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
 
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
-    }
-
-    sealed partial class Choice2Of3<T1, T2, T3> : Choice<T1, T2, T3>
-    {
-        readonly T2 _value;
-
-        public Choice2Of3(T2 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third)
+        sealed partial class Choice2Of3 : Choice<T1, T2, T3>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
-            if (third == null) throw new ArgumentNullException(nameof(third));
+            readonly T2 _value;
 
-            return second(_value);
+            public Choice2Of3(T2 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+                if (third == null) throw new ArgumentNullException(nameof(third));
+
+                return second(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
 
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
-    }
-
-    sealed partial class Choice3Of3<T1, T2, T3> : Choice<T1, T2, T3>
-    {
-        readonly T3 _value;
-
-        public Choice3Of3(T3 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third)
+        sealed partial class Choice3Of3 : Choice<T1, T2, T3>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
-            if (third == null) throw new ArgumentNullException(nameof(third));
+            readonly T3 _value;
 
-            return third(_value);
+            public Choice3Of3(T3 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+                if (third == null) throw new ArgumentNullException(nameof(third));
+
+                return third(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
-
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2, T3> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
     }
+
 
     abstract partial class Choice<T1, T2, T3, T4> : IEquatable<Choice<T1, T2, T3, T4>>
     {
+        internal static Choice<T1, T2, T3, T4> Choice1(T1 value) => new Choice1Of4(value);
+        internal static Choice<T1, T2, T3, T4> Choice2(T2 value) => new Choice2Of4(value);
+        internal static Choice<T1, T2, T3, T4> Choice3(T3 value) => new Choice3Of4(value);
+        internal static Choice<T1, T2, T3, T4> Choice4(T4 value) => new Choice4Of4(value);
+
         public abstract TResult Match<TResult>(
             Func<T1, TResult> first,
             Func<T2, TResult> second,
@@ -400,97 +416,98 @@ namespace Choices
         public abstract bool Equals(Choice<T1, T2, T3, T4> other);
 
         public abstract override string ToString();
-    }
 
-    sealed partial class Choice1Of4<T1, T2, T3, T4> : Choice<T1, T2, T3, T4>
-    {
-        readonly T1 _value;
-
-        public Choice1Of4(T1 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth)
+        sealed partial class Choice1Of4 : Choice<T1, T2, T3, T4>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
-            if (third == null) throw new ArgumentNullException(nameof(third));
-            if (fourth == null) throw new ArgumentNullException(nameof(fourth));
+            readonly T1 _value;
 
-            return first(_value);
+            public Choice1Of4(T1 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+                if (third == null) throw new ArgumentNullException(nameof(third));
+                if (fourth == null) throw new ArgumentNullException(nameof(fourth));
+
+                return first(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
 
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
-    }
-
-    sealed partial class Choice2Of4<T1, T2, T3, T4> : Choice<T1, T2, T3, T4>
-    {
-        readonly T2 _value;
-
-        public Choice2Of4(T2 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth)
+        sealed partial class Choice2Of4 : Choice<T1, T2, T3, T4>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
-            if (third == null) throw new ArgumentNullException(nameof(third));
-            if (fourth == null) throw new ArgumentNullException(nameof(fourth));
+            readonly T2 _value;
 
-            return second(_value);
+            public Choice2Of4(T2 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+                if (third == null) throw new ArgumentNullException(nameof(third));
+                if (fourth == null) throw new ArgumentNullException(nameof(fourth));
+
+                return second(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
 
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
-    }
-
-    sealed partial class Choice3Of4<T1, T2, T3, T4> : Choice<T1, T2, T3, T4>
-    {
-        readonly T3 _value;
-
-        public Choice3Of4(T3 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth)
+        sealed partial class Choice3Of4 : Choice<T1, T2, T3, T4>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
-            if (third == null) throw new ArgumentNullException(nameof(third));
-            if (fourth == null) throw new ArgumentNullException(nameof(fourth));
+            readonly T3 _value;
 
-            return third(_value);
+            public Choice3Of4(T3 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+                if (third == null) throw new ArgumentNullException(nameof(third));
+                if (fourth == null) throw new ArgumentNullException(nameof(fourth));
+
+                return third(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
 
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
-    }
-
-    sealed partial class Choice4Of4<T1, T2, T3, T4> : Choice<T1, T2, T3, T4>
-    {
-        readonly T4 _value;
-
-        public Choice4Of4(T4 value) => _value = value;
-
-        public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth)
+        sealed partial class Choice4Of4 : Choice<T1, T2, T3, T4>
         {
-            if (first == null) throw new ArgumentNullException(nameof(first));
-            if (second == null) throw new ArgumentNullException(nameof(second));
-            if (third == null) throw new ArgumentNullException(nameof(third));
-            if (fourth == null) throw new ArgumentNullException(nameof(fourth));
+            readonly T4 _value;
 
-            return fourth(_value);
+            public Choice4Of4(T4 value) => _value = value;
+
+            public override TResult Match<TResult>(Func<T1, TResult> first, Func<T2, TResult> second, Func<T3, TResult> third, Func<T4, TResult> fourth)
+            {
+                if (first == null) throw new ArgumentNullException(nameof(first));
+                if (second == null) throw new ArgumentNullException(nameof(second));
+                if (third == null) throw new ArgumentNullException(nameof(third));
+                if (fourth == null) throw new ArgumentNullException(nameof(fourth));
+
+                return fourth(_value);
+            }
+
+            public override int GetHashCode() => Choice.GetHashCode(this, _value);
+            public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
+            public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
+
+            public override string ToString() => Choice.ToString(_value);
         }
-
-        public override int GetHashCode() => Choice.GetHashCode(this, _value);
-        public override bool Equals(object obj) => Choice.Equals(this, obj, c => c._value);
-        public override bool Equals(Choice<T1, T2, T3, T4> other) => Choice.Equals(this, other, c => c._value);
-
-        public override string ToString() => Choice.ToString(_value);
     }
+
 }
