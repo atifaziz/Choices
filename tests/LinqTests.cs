@@ -24,7 +24,7 @@ namespace Choices.Linq.Right.Tests
     [TestFixture]
     public class LinqTests
     {
-        static IChoice<FormatException, int> TryParseInt32(string s) =>
+        static Choice<FormatException, int> TryParseInt32(string s) =>
             int.TryParse(s, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out var n)
             ? Choice2<FormatException, int>(n)
             : Choice1<FormatException, int>(new FormatException($"\"{s}\" is not a valid signed integer."));
@@ -40,7 +40,7 @@ namespace Choices.Linq.Right.Tests
         {
             var error =
                 TryParseInt32("forty-two")
-                    .Bind(_ => AssertNotCalled<IChoice<FormatException, object>>())
+                    .Bind(_ => AssertNotCalled<Choice<FormatException, object>>())
                     .Match(e => e, _ => AssertNotCalled<FormatException>());
 
             Assert.That(error, Is.InstanceOf(typeof(FormatException)));
@@ -138,7 +138,7 @@ namespace Choices.Linq.Left.Tests
     [TestFixture]
     public class LinqTests
     {
-        static IChoice<int, FormatException> TryParseInt32(string s) =>
+        static Choice<int, FormatException> TryParseInt32(string s) =>
             int.TryParse(s, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out var n)
             ? Choice1<int, FormatException>(n)
             : Choice2<int, FormatException>(new FormatException($"\"{s}\" is not a valid signed integer."));
@@ -154,7 +154,7 @@ namespace Choices.Linq.Left.Tests
         {
             var error =
                 TryParseInt32("forty-two")
-                    .Bind(_ => AssertNotCalled<IChoice<object, FormatException>>())
+                    .Bind(_ => AssertNotCalled<Choice<object, FormatException>>())
                     .Match(_ => AssertNotCalled<FormatException>(), e => e);
 
             Assert.That(error, Is.InstanceOf(typeof(FormatException)));

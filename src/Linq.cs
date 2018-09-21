@@ -21,13 +21,13 @@ namespace Choices.Linq.Right
 
     static partial class RightResult
     {
-        public static IChoice<T, TResult> Return<T, TResult>(TResult value) =>
+        public static Choice<T, TResult> Return<T, TResult>(TResult value) =>
             Choice2<T, TResult>(value);
 
-        public static IChoice<T1, TResult>
+        public static Choice<T1, TResult>
             Bind<T1, T2, TResult>(
-                this IChoice<T1, T2> choice,
-                Func<T2, IChoice<T1, TResult>> fun)
+                this Choice<T1, T2> choice,
+                Func<T2, Choice<T1, TResult>> fun)
         {
             if (choice == null) throw new ArgumentNullException(nameof(choice));
             if (fun == null) throw new ArgumentNullException(nameof(fun));
@@ -35,9 +35,9 @@ namespace Choices.Linq.Right
             return choice.Match(Choice1<T1, TResult>, fun);
         }
 
-        public static IChoice<T1, TResult>
+        public static Choice<T1, TResult>
             Select<T1, T2, TResult>(
-                this IChoice<T1, T2> choice,
+                this Choice<T1, T2> choice,
                 Func<T2, TResult> selector)
         {
             if (choice == null) throw new ArgumentNullException(nameof(choice));
@@ -46,10 +46,10 @@ namespace Choices.Linq.Right
             return choice.Bind(b => Choice2<T1, TResult>(selector(b)));
         }
 
-        public static IChoice<T1, TResult>
+        public static Choice<T1, TResult>
             SelectMany<T1, T2, T3, TResult>(
-                this IChoice<T1, T2> first,
-                Func<T2, IChoice<T1, T3>> secondSelector,
+                this Choice<T1, T2> first,
+                Func<T2, Choice<T1, T3>> secondSelector,
                 Func<T2, T3, TResult> resultSelector)
         {
             if (first == null) throw new ArgumentNullException(nameof(first));
@@ -68,13 +68,13 @@ namespace Choices.Linq.Left
 
     static partial class LeftResult
     {
-        public static IChoice<TResult, T> Return<TResult, T>(TResult value) =>
+        public static Choice<TResult, T> Return<TResult, T>(TResult value) =>
             Choice1<TResult, T>(value);
 
-        public static IChoice<TResult, T2>
+        public static Choice<TResult, T2>
             Bind<T1, T2, TResult>(
-                this IChoice<T1, T2> choice,
-                Func<T1, IChoice<TResult, T2>> fun)
+                this Choice<T1, T2> choice,
+                Func<T1, Choice<TResult, T2>> fun)
         {
             if (choice == null) throw new ArgumentNullException(nameof(choice));
             if (fun == null) throw new ArgumentNullException(nameof(fun));
@@ -82,9 +82,9 @@ namespace Choices.Linq.Left
             return choice.Match(fun, Choice2<TResult, T2>);
         }
 
-        public static IChoice<TResult, T2>
+        public static Choice<TResult, T2>
             Select<T1, T2, TResult>(
-                this IChoice<T1, T2> choice,
+                this Choice<T1, T2> choice,
                 Func<T1, TResult> selector)
         {
             if (choice == null) throw new ArgumentNullException(nameof(choice));
@@ -93,10 +93,10 @@ namespace Choices.Linq.Left
             return choice.Bind(a => Choice1<TResult, T2>(selector(a)));
         }
 
-        public static IChoice<TResult, T2>
+        public static Choice<TResult, T2>
             SelectMany<T1, T2, T3, TResult>(
-                this IChoice<T1, T2> first,
-                Func<T1, IChoice<T3, T2>> secondSelector,
+                this Choice<T1, T2> first,
+                Func<T1, Choice<T3, T2>> secondSelector,
                 Func<T1, T3, TResult> resultSelector)
         {
             if (first == null) throw new ArgumentNullException(nameof(first));

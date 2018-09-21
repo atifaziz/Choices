@@ -71,7 +71,7 @@ var r3 =
                             "7-10")))
 ```
 
-Note that type of `r3` will be `IChoice<string, string, string, string>`.
+Note that type of `r3` will be `Choice<string, string, string, string>`.
 
 `Choice.When1`, `Choice.When2`, `Choice.When3` and so on, are useful for
 setting up a function that maps choices to results.
@@ -106,7 +106,7 @@ Suppose the following function that attempts to parse a `string` into an
 `int`:
 
 ```c#
-static IChoice<FormatException, int> TryParseInt32(string s) =>
+static Choice<FormatException, int> TryParseInt32(string s) =>
     int.TryParse(s, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out var n)
     ? Choice2<FormatException, int>(n)
     : Choice1<FormatException, int>(new FormatException($"\"{s}\" is not a valid signed integer."));
