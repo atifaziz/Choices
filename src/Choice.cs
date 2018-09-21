@@ -24,7 +24,7 @@ namespace Choices
 
     static partial class Choice
     {
-        static partial class New
+        public static partial class New
         {
             public static Choice<T1, T2>         Choice1<T1, T2>        (T1 value) => Choice<T1, T2>        .Choice1(value);
             public static Choice<T1, T2>         Choice2<T1, T2>        (T2 value) => Choice<T1, T2>        .Choice2(value);

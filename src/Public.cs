@@ -1,10 +1,6 @@
 namespace Choices
 {
-    public partial class Choice
-    {
-        public partial class New {}
-    }
-
+    public partial class Choice {}
     public partial class Choice<T1, T2> {}
     public partial class Choice<T1, T2, T3> {}
     public partial class Choice<T1, T2, T3, T4> {}
