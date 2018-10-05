@@ -22,6 +22,10 @@ namespace Choices
     using System.Collections.Generic;
     using static Choice.New;
 
+    public enum ChosenOf2 { First, Second }
+    public enum ChosenOf3 { First, Second, Third }
+    public enum ChosenOf4 { First, Second, Third, Fourth }
+
     static partial class Choice
     {
         public static partial class New
@@ -35,6 +39,51 @@ namespace Choices
             public static Choice<T1, T2, T3, T4> Choice2<T1, T2, T3, T4>(T2 value) => Choice<T1, T2, T3, T4>.Choice2(value);
             public static Choice<T1, T2, T3, T4> Choice3<T1, T2, T3, T4>(T3 value) => Choice<T1, T2, T3, T4>.Choice3(value);
             public static Choice<T1, T2, T3, T4> Choice4<T1, T2, T3, T4>(T4 value) => Choice<T1, T2, T3, T4>.Choice4(value);
+        }
+
+        public static Choice<T1, T2> Switch<T1, T2>(
+            ChosenOf2 chosen,
+            Func<T1> firstSelector,
+            Func<T2> secondSelector)
+        {
+            switch (chosen)
+            {
+                case ChosenOf2.First:  return Choice1<T1, T2>(firstSelector());
+                case ChosenOf2.Second: return Choice2<T1, T2>(secondSelector());
+                default: throw new ArgumentException(nameof(chosen));
+            }
+        }
+
+        public static Choice<T1, T2, T3> Switch<T1, T2, T3>(
+            ChosenOf3 chosen,
+            Func<T1> firstSelector,
+            Func<T2> secondSelector,
+            Func<T3> thirdSelector)
+        {
+            switch (chosen)
+            {
+                case ChosenOf3.First : return Choice1<T1, T2, T3>(firstSelector());
+                case ChosenOf3.Second: return Choice2<T1, T2, T3>(secondSelector());
+                case ChosenOf3.Third : return Choice3<T1, T2, T3>(thirdSelector());
+                default: throw new ArgumentException(nameof(chosen));
+            }
+        }
+
+        public static Choice<T1, T2, T3, T4> Switch<T1, T2, T3, T4>(
+            ChosenOf4 chosen,
+            Func<T1> firstSelector,
+            Func<T2> secondSelector,
+            Func<T3> thirdSelector,
+            Func<T4> fourthSelector)
+        {
+            switch (chosen)
+            {
+                case ChosenOf4.First : return Choice1<T1, T2, T3, T4>(firstSelector());
+                case ChosenOf4.Second: return Choice2<T1, T2, T3, T4>(secondSelector());
+                case ChosenOf4.Third : return Choice3<T1, T2, T3, T4>(thirdSelector());
+                case ChosenOf4.Fourth: return Choice4<T1, T2, T3, T4>(fourthSelector());
+                default: throw new ArgumentException(nameof(chosen));
+            }
         }
 
         public static Choice<T1, T2> If<T1, T2>(bool flag, Func<T1> t, Func<T2> f)
