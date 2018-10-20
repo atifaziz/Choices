@@ -16,4 +16,36 @@
     <ProjectReference Include="..\src\Choices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <DotNetCliToolReference Include="T5.TextTransform.Tool" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Box.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Box.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ChoiceOfTests.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ChoiceOfTests.g.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Box.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Box.g.cs</LastGenOutput>
+    </None>
+    <None Update="ChoiceOfTests.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ChoiceOfTests.g.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
 </Project>

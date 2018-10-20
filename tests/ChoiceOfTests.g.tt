@@ -1,0 +1,144 @@
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Linq" #>
+#region Copyright (c) 2018 Atif Aziz. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+#endregion
+
+namespace Choices.Tests
+{
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using static Choice.New;
+    using Int1 = Box1<int>;
+    using Int2 = Box2<int>;
+    using Int3 = Box3<int>;
+    using Int4 = Box4<int>;
+
+    [TestFixture]
+    partial class ChoiceOfTests
+    {<#
+    foreach (var d in
+        from d in Enumerable.Range(1, 4).Skip(1)
+        select new
+        {
+            Ord  = d,
+            Seq  = Enumerable.Range(1, d),
+            Text = d.ToString(CultureInfo.InvariantCulture)
+        }) { #>
+
+        public class ChoiceOf<#= d.Text #>
+        {<#
+        foreach (var n in
+            from n in d.Seq
+            select new
+            {
+                Ord   = n,
+                Text  = n.ToString(CultureInfo.InvariantCulture),
+                TArgs = string.Join(", ", from i in d.Seq select "Int" + i.ToString(CultureInfo.InvariantCulture)),
+                Match = new Func<string, string>(s =>
+                    string.Join(", ",
+                        from i in Enumerable.Range(1, d.Ord)
+                        select i == n ? s : "_ => throw BadChoice()"))
+            }) { #>
+
+            [Test]
+            public void Choice<#= n.Text #>()
+            {
+                var c = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Match(<#= n.Match("x => x.Value") #>);
+                Assert.That(result, Is.EqualTo(42));
+            }
+
+            [Test]
+            public void Map<#= n.Text #>()
+            {
+                var c = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<#= n.Text #>(x => x.Value.ToString("x"))
+                              .Match(<#= n.Match("x => x") #>);
+                Assert.That(result, Is.EqualTo("2a"));
+            }
+
+            [Test]
+            public void Choice<#= n.Text #>ToString()
+            {
+                var actual = Choice<#= n.Text #><<#= n.TArgs #>>(42).ToString();
+                Assert.That(actual, Is.EqualTo("42"));
+            }
+
+            public class Choice<#= n.Text #>Equality
+            {
+                [Test]
+                public void Null()
+                {
+                    var choice = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    Assert.False(choice.Equals((object) null));
+                    Assert.False(choice.Equals(null));
+                }
+
+                [Test]
+                public void Self()
+                {
+                    var choice = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    Assert.True(choice.Equals((object) choice));
+                    Assert.True(choice.Equals(choice));
+                }
+
+                [Test]
+                public void Value()
+                {
+                    var x = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    var y = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    Assert.True(x.Equals((object) y));
+                    Assert.True(x.Equals(y));
+                }
+            }
+
+            public class Choice<#= n.Text #>Inequality
+            {
+                [Test]
+                public void OtherType()
+                {
+                    var choice = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    Assert.False(choice.Equals(new object()));
+                }
+
+                [Test]
+                public void OtherChoice()
+                {
+                    var choice1 = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    var choice2 = Choice<#= n.Ord == 1 ? "2" : "1" #><<#= n.TArgs #>>(42);
+                    Assert.False(choice1.Equals(choice2));
+                }
+
+                [Test]
+                public void OtherValue()
+                {
+                    var x = Choice<#= n.Text #><<#= n.TArgs #>>(4);
+                    var y = Choice<#= n.Text #><<#= n.TArgs #>>(2);
+                    Assert.False(x.Equals((object) y));
+                    Assert.False(x.Equals(y));
+                }
+            }
+<#      } #>
+        }
+<#  } #>
+    }
+}
