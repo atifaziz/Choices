@@ -47,6 +47,12 @@ namespace Choices.Linq.Right
         }
 
         public static Choice<T1, TResult>
+            SelectMany<T1, T2, TResult>(
+                this Choice<T1, T2> choice,
+                Func<T2, Choice<T1, TResult>> resultSelector) =>
+            choice.Bind(resultSelector);
+
+        public static Choice<T1, TResult>
             SelectMany<T1, T2, T3, TResult>(
                 this Choice<T1, T2> first,
                 Func<T2, Choice<T1, T3>> secondSelector,
@@ -92,6 +98,12 @@ namespace Choices.Linq.Left
 
             return choice.Bind(a => Choice1<TResult, T2>(selector(a)));
         }
+
+        public static Choice<TResult, T2>
+            SelectMany<T1, T2, TResult>(
+                this Choice<T1, T2> choice,
+                Func<T1, Choice<TResult, T2>> resultSelector) =>
+            choice.Bind(resultSelector);
 
         public static Choice<TResult, T2>
             SelectMany<T1, T2, T3, TResult>(
