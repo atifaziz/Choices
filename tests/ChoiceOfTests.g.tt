@@ -35,11 +35,14 @@ namespace Choices.Tests
     {<#
     foreach (var d in
         from d in Enumerable.Range(1, 4).Skip(1)
+        let ds = Enumerable.Range(1, d)
         select new
         {
-            Ord  = d,
-            Seq  = Enumerable.Range(1, d),
-            Text = d.ToString(CultureInfo.InvariantCulture)
+            Ord   = d,
+            Seq   = ds,
+            Text  = d.ToString(CultureInfo.InvariantCulture),
+            TArgs = string.Join(", ", from i in ds
+                                      select "Int" + i.ToString(CultureInfo.InvariantCulture)),
         }) { #>
 
         public class ChoiceOf<#= d.Text #>
@@ -50,7 +53,6 @@ namespace Choices.Tests
             {
                 Ord   = n,
                 Text  = n.ToString(CultureInfo.InvariantCulture),
-                TArgs = string.Join(", ", from i in d.Seq select "Int" + i.ToString(CultureInfo.InvariantCulture)),
                 Match = new Func<string, string>(s =>
                     string.Join(", ",
                         from i in Enumerable.Range(1, d.Ord)
@@ -60,7 +62,7 @@ namespace Choices.Tests
             [Test]
             public void Choice<#= n.Text #>()
             {
-                var c = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                var c = Choice<#= n.Text #><<#= d.TArgs #>>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Match(<#= n.Match("x => x.Value") #>);
                 Assert.That(result, Is.EqualTo(42));
@@ -69,7 +71,7 @@ namespace Choices.Tests
             [Test]
             public void Map<#= n.Text #>()
             {
-                var c = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                var c = Choice<#= n.Text #><<#= d.TArgs #>>(42);
                 Assert.That(c, Is.Not.Null);
                 var result = c.Map<#= n.Text #>(x => x.Value.ToString("x"))
                               .Match(<#= n.Match("x => x") #>);
@@ -79,7 +81,7 @@ namespace Choices.Tests
             [Test]
             public void Choice<#= n.Text #>ToString()
             {
-                var actual = Choice<#= n.Text #><<#= n.TArgs #>>(42).ToString();
+                var actual = Choice<#= n.Text #><<#= d.TArgs #>>(42).ToString();
                 Assert.That(actual, Is.EqualTo("42"));
             }
 
@@ -88,7 +90,7 @@ namespace Choices.Tests
                 [Test]
                 public void Null()
                 {
-                    var choice = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    var choice = Choice<#= n.Text #><<#= d.TArgs #>>(42);
                     Assert.False(choice.Equals((object) null));
                     Assert.False(choice.Equals(null));
                 }
@@ -96,7 +98,7 @@ namespace Choices.Tests
                 [Test]
                 public void Self()
                 {
-                    var choice = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    var choice = Choice<#= n.Text #><<#= d.TArgs #>>(42);
                     Assert.True(choice.Equals((object) choice));
                     Assert.True(choice.Equals(choice));
                 }
@@ -104,8 +106,8 @@ namespace Choices.Tests
                 [Test]
                 public void Value()
                 {
-                    var x = Choice<#= n.Text #><<#= n.TArgs #>>(42);
-                    var y = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    var x = Choice<#= n.Text #><<#= d.TArgs #>>(42);
+                    var y = Choice<#= n.Text #><<#= d.TArgs #>>(42);
                     Assert.True(x.Equals((object) y));
                     Assert.True(x.Equals(y));
                 }
@@ -116,28 +118,58 @@ namespace Choices.Tests
                 [Test]
                 public void OtherType()
                 {
-                    var choice = Choice<#= n.Text #><<#= n.TArgs #>>(42);
+                    var choice = Choice<#= n.Text #><<#= d.TArgs #>>(42);
                     Assert.False(choice.Equals(new object()));
                 }
 
                 [Test]
                 public void OtherChoice()
                 {
-                    var choice1 = Choice<#= n.Text #><<#= n.TArgs #>>(42);
-                    var choice2 = Choice<#= n.Ord == 1 ? "2" : "1" #><<#= n.TArgs #>>(42);
+                    var choice1 = Choice<#= n.Text #><<#= d.TArgs #>>(42);
+                    var choice2 = Choice<#= n.Ord == 1 ? "2" : "1" #><<#= d.TArgs #>>(42);
                     Assert.False(choice1.Equals(choice2));
                 }
 
                 [Test]
                 public void OtherValue()
                 {
-                    var x = Choice<#= n.Text #><<#= n.TArgs #>>(4);
-                    var y = Choice<#= n.Text #><<#= n.TArgs #>>(2);
+                    var x = Choice<#= n.Text #><<#= d.TArgs #>>(4);
+                    var y = Choice<#= n.Text #><<#= d.TArgs #>>(2);
                     Assert.False(x.Equals((object) y));
                     Assert.False(x.Equals(y));
                 }
             }
 <#      } #>
+
+            [Test]
+            public void TuplesToChoices()
+            {
+                var choices = Tuple.Create<<#= d.TArgs #>>(<#= 
+                    string.Join(", ", from i in d.Seq select i.ToString(CultureInfo.InvariantCulture)) #>).ToChoices();
+
+                Assert.That(choices, Is.EqualTo(new[]
+                {
+<#      foreach (var i in d.Seq) { #>
+                    Choice<#= i.ToString(CultureInfo.InvariantCulture) #><<#= d.TArgs #>>(<#= i.ToString(CultureInfo.InvariantCulture) #>),
+<#      } #>
+                }));
+            }
+
+            [Test]
+            public void ValueTuplesToChoices()
+            {
+                var choices = (<#= 
+                    string.Join(", ", from i in d.Seq
+                                      select i.ToString(CultureInfo.InvariantCulture) into i
+                                      select "(Int" + i + ") " + i) #>).ToChoices();
+
+                Assert.That(choices, Is.EqualTo(new[]
+                {
+<#      foreach (var i in d.Seq) { #>
+                    Choice<#= i.ToString(CultureInfo.InvariantCulture) #><<#= d.TArgs #>>(<#= i.ToString(CultureInfo.InvariantCulture) #>),
+<#      } #>
+                }));
+            }
         }
 <#  } #>
     }

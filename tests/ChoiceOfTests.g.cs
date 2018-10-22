@@ -191,6 +191,30 @@ namespace Choices.Tests
                     Assert.False(x.Equals(y));
                 }
             }
+
+            [Test]
+            public void TuplesToChoices()
+            {
+                var choices = Tuple.Create<Int1, Int2>(1, 2).ToChoices();
+
+                Assert.That(choices, Is.EqualTo(new[]
+                {
+                    Choice1<Int1, Int2>(1),
+                    Choice2<Int1, Int2>(2),
+                }));
+            }
+
+            [Test]
+            public void ValueTuplesToChoices()
+            {
+                var choices = ((Int1) 1, (Int2) 2).ToChoices();
+
+                Assert.That(choices, Is.EqualTo(new[]
+                {
+                    Choice1<Int1, Int2>(1),
+                    Choice2<Int1, Int2>(2),
+                }));
+            }
         }
 
         public class ChoiceOf3
@@ -436,6 +460,32 @@ namespace Choices.Tests
                     Assert.False(x.Equals((object) y));
                     Assert.False(x.Equals(y));
                 }
+            }
+
+            [Test]
+            public void TuplesToChoices()
+            {
+                var choices = Tuple.Create<Int1, Int2, Int3>(1, 2, 3).ToChoices();
+
+                Assert.That(choices, Is.EqualTo(new[]
+                {
+                    Choice1<Int1, Int2, Int3>(1),
+                    Choice2<Int1, Int2, Int3>(2),
+                    Choice3<Int1, Int2, Int3>(3),
+                }));
+            }
+
+            [Test]
+            public void ValueTuplesToChoices()
+            {
+                var choices = ((Int1) 1, (Int2) 2, (Int3) 3).ToChoices();
+
+                Assert.That(choices, Is.EqualTo(new[]
+                {
+                    Choice1<Int1, Int2, Int3>(1),
+                    Choice2<Int1, Int2, Int3>(2),
+                    Choice3<Int1, Int2, Int3>(3),
+                }));
             }
         }
 
@@ -763,6 +813,34 @@ namespace Choices.Tests
                     Assert.False(x.Equals((object) y));
                     Assert.False(x.Equals(y));
                 }
+            }
+
+            [Test]
+            public void TuplesToChoices()
+            {
+                var choices = Tuple.Create<Int1, Int2, Int3, Int4>(1, 2, 3, 4).ToChoices();
+
+                Assert.That(choices, Is.EqualTo(new[]
+                {
+                    Choice1<Int1, Int2, Int3, Int4>(1),
+                    Choice2<Int1, Int2, Int3, Int4>(2),
+                    Choice3<Int1, Int2, Int3, Int4>(3),
+                    Choice4<Int1, Int2, Int3, Int4>(4),
+                }));
+            }
+
+            [Test]
+            public void ValueTuplesToChoices()
+            {
+                var choices = ((Int1) 1, (Int2) 2, (Int3) 3, (Int4) 4).ToChoices();
+
+                Assert.That(choices, Is.EqualTo(new[]
+                {
+                    Choice1<Int1, Int2, Int3, Int4>(1),
+                    Choice2<Int1, Int2, Int3, Int4>(2),
+                    Choice3<Int1, Int2, Int3, Int4>(3),
+                    Choice4<Int1, Int2, Int3, Int4>(4),
+                }));
             }
         }
     }

@@ -92,6 +92,20 @@ c = Choice3<int, string, DateTime>(new DateTime(2002, 2, 13));
 Console.WriteLine(map(c)); // 2002
 ```
 
+Convert tuples to choices:
+
+```c#
+var choiceTypes =
+    from choice in (42, "foobar", Math.PI).ToChoices()
+    select choice.Match(a => a.GetType(),
+                        b => b.GetType(),
+                        c => c.GetType())
+    into type
+    select type.Name;
+
+Console.WriteLine(string.Join(", ", choiceTypes)); // Int32, String, Double
+```
+
 
 ### LINQ
 

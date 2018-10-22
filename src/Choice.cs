@@ -194,6 +194,54 @@ namespace Choices
                                 x => Choice4<T1, T2, T3, TResult>(selector(x)));
         }
 
+        public static IReadOnlyList<Choice<T1, T2>>
+            ToChoices<T1, T2>(this (T1, T2) tuple) => new[]
+            {
+                Choice1<T1, T2>(tuple.Item1),
+                Choice2<T1, T2>(tuple.Item2),
+            };
+
+        public static IReadOnlyList<Choice<T1, T2, T3>>
+            ToChoices<T1, T2, T3>(this (T1, T2, T3) tuple) => new[]
+            {
+                Choice1<T1, T2, T3>(tuple.Item1),
+                Choice2<T1, T2, T3>(tuple.Item2),
+                Choice3<T1, T2, T3>(tuple.Item3),
+            };
+
+        public static IReadOnlyList<Choice<T1, T2, T3, T4>>
+            ToChoices<T1, T2, T3, T4>(this (T1, T2, T3, T4) tuple) => new[]
+            {
+                Choice1<T1, T2, T3, T4>(tuple.Item1),
+                Choice2<T1, T2, T3, T4>(tuple.Item2),
+                Choice3<T1, T2, T3, T4>(tuple.Item3),
+                Choice4<T1, T2, T3, T4>(tuple.Item4),
+            };
+
+        public static IReadOnlyList<Choice<T1, T2>>
+            ToChoices<T1, T2>(this Tuple<T1, T2> tuple) => new[]
+            {
+                Choice1<T1, T2>(tuple.Item1),
+                Choice2<T1, T2>(tuple.Item2),
+            };
+
+        public static IReadOnlyList<Choice<T1, T2, T3>>
+            ToChoices<T1, T2, T3>(this Tuple<T1, T2, T3> tuple) => new[]
+            {
+                Choice1<T1, T2, T3>(tuple.Item1),
+                Choice2<T1, T2, T3>(tuple.Item2),
+                Choice3<T1, T2, T3>(tuple.Item3),
+            };
+
+        public static IReadOnlyList<Choice<T1, T2, T3, T4>>
+            ToChoices<T1, T2, T3, T4>(this Tuple<T1, T2, T3, T4> tuple) => new[]
+            {
+                Choice1<T1, T2, T3, T4>(tuple.Item1),
+                Choice2<T1, T2, T3, T4>(tuple.Item2),
+                Choice3<T1, T2, T3, T4>(tuple.Item3),
+                Choice4<T1, T2, T3, T4>(tuple.Item4),
+            };
+
         internal static bool Equals<T1, T2, TValue>(T1 @this, T2 that,
                                                     Func<T1, TValue> choiceSelector)
             => that != null
