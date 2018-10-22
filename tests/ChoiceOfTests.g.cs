@@ -17,13 +17,17 @@
 namespace Choices.Tests
 {
     using System;
-    using System.Collections.Generic;
+    using System.Globalization;
     using NUnit.Framework;
     using static Choice.New;
     using Int1 = Box1<int>;
     using Int2 = Box2<int>;
     using Int3 = Box3<int>;
     using Int4 = Box4<int>;
+    using Str1 = Box1<string>;
+    using Str2 = Box2<string>;
+    using Str3 = Box3<string>;
+    using Str4 = Box4<string>;
 
     [TestFixture]
     partial class ChoiceOfTests
@@ -54,6 +58,15 @@ namespace Choices.Tests
             {
                 var actual = Choice1<Int1, Int2>(42).ToString();
                 Assert.That(actual, Is.EqualTo("42"));
+            }
+
+            [Test]
+            public void Choice1Map()
+            {
+                var c = Choice1<Int1, Int2>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Str1, Str2>(x => new Str1(x.Value.ToString("x")), _ => throw BadChoice());
+                Assert.That(result, Is.EqualTo(Choice1<Str1, Str2>(new Str1("2a"))));
             }
 
             public class Choice1Equality
@@ -135,6 +148,15 @@ namespace Choices.Tests
             {
                 var actual = Choice2<Int1, Int2>(42).ToString();
                 Assert.That(actual, Is.EqualTo("42"));
+            }
+
+            [Test]
+            public void Choice2Map()
+            {
+                var c = Choice2<Int1, Int2>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Str1, Str2>(_ => throw BadChoice(), x => new Str2(x.Value.ToString("x")));
+                Assert.That(result, Is.EqualTo(Choice2<Str1, Str2>(new Str2("2a"))));
             }
 
             public class Choice2Equality
@@ -245,6 +267,15 @@ namespace Choices.Tests
                 Assert.That(actual, Is.EqualTo("42"));
             }
 
+            [Test]
+            public void Choice1Map()
+            {
+                var c = Choice1<Int1, Int2, Int3>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Int3, Str1, Str2, Str3>(x => new Str1(x.Value.ToString("x")), _ => throw BadChoice(), _ => throw BadChoice());
+                Assert.That(result, Is.EqualTo(Choice1<Str1, Str2, Str3>(new Str1("2a"))));
+            }
+
             public class Choice1Equality
             {
                 [Test]
@@ -326,6 +357,15 @@ namespace Choices.Tests
                 Assert.That(actual, Is.EqualTo("42"));
             }
 
+            [Test]
+            public void Choice2Map()
+            {
+                var c = Choice2<Int1, Int2, Int3>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Int3, Str1, Str2, Str3>(_ => throw BadChoice(), x => new Str2(x.Value.ToString("x")), _ => throw BadChoice());
+                Assert.That(result, Is.EqualTo(Choice2<Str1, Str2, Str3>(new Str2("2a"))));
+            }
+
             public class Choice2Equality
             {
                 [Test]
@@ -405,6 +445,15 @@ namespace Choices.Tests
             {
                 var actual = Choice3<Int1, Int2, Int3>(42).ToString();
                 Assert.That(actual, Is.EqualTo("42"));
+            }
+
+            [Test]
+            public void Choice3Map()
+            {
+                var c = Choice3<Int1, Int2, Int3>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Int3, Str1, Str2, Str3>(_ => throw BadChoice(), _ => throw BadChoice(), x => new Str3(x.Value.ToString("x")));
+                Assert.That(result, Is.EqualTo(Choice3<Str1, Str2, Str3>(new Str3("2a"))));
             }
 
             public class Choice3Equality
@@ -517,6 +566,15 @@ namespace Choices.Tests
                 Assert.That(actual, Is.EqualTo("42"));
             }
 
+            [Test]
+            public void Choice1Map()
+            {
+                var c = Choice1<Int1, Int2, Int3, Int4>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Int3, Int4, Str1, Str2, Str3, Str4>(x => new Str1(x.Value.ToString("x")), _ => throw BadChoice(), _ => throw BadChoice(), _ => throw BadChoice());
+                Assert.That(result, Is.EqualTo(Choice1<Str1, Str2, Str3, Str4>(new Str1("2a"))));
+            }
+
             public class Choice1Equality
             {
                 [Test]
@@ -596,6 +654,15 @@ namespace Choices.Tests
             {
                 var actual = Choice2<Int1, Int2, Int3, Int4>(42).ToString();
                 Assert.That(actual, Is.EqualTo("42"));
+            }
+
+            [Test]
+            public void Choice2Map()
+            {
+                var c = Choice2<Int1, Int2, Int3, Int4>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Int3, Int4, Str1, Str2, Str3, Str4>(_ => throw BadChoice(), x => new Str2(x.Value.ToString("x")), _ => throw BadChoice(), _ => throw BadChoice());
+                Assert.That(result, Is.EqualTo(Choice2<Str1, Str2, Str3, Str4>(new Str2("2a"))));
             }
 
             public class Choice2Equality
@@ -679,6 +746,15 @@ namespace Choices.Tests
                 Assert.That(actual, Is.EqualTo("42"));
             }
 
+            [Test]
+            public void Choice3Map()
+            {
+                var c = Choice3<Int1, Int2, Int3, Int4>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Int3, Int4, Str1, Str2, Str3, Str4>(_ => throw BadChoice(), _ => throw BadChoice(), x => new Str3(x.Value.ToString("x")), _ => throw BadChoice());
+                Assert.That(result, Is.EqualTo(Choice3<Str1, Str2, Str3, Str4>(new Str3("2a"))));
+            }
+
             public class Choice3Equality
             {
                 [Test]
@@ -758,6 +834,15 @@ namespace Choices.Tests
             {
                 var actual = Choice4<Int1, Int2, Int3, Int4>(42).ToString();
                 Assert.That(actual, Is.EqualTo("42"));
+            }
+
+            [Test]
+            public void Choice4Map()
+            {
+                var c = Choice4<Int1, Int2, Int3, Int4>(42);
+                Assert.That(c, Is.Not.Null);
+                var result = c.Map<Int1, Int2, Int3, Int4, Str1, Str2, Str3, Str4>(_ => throw BadChoice(), _ => throw BadChoice(), _ => throw BadChoice(), x => new Str4(x.Value.ToString("x")));
+                Assert.That(result, Is.EqualTo(Choice4<Str1, Str2, Str3, Str4>(new Str4("2a"))));
             }
 
             public class Choice4Equality

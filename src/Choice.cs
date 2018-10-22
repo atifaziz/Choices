@@ -107,92 +107,65 @@ namespace Choices
                              selector);
         }
 
-        public static Choice<TResult, T2> Map1<T1, T2, TResult>(this Choice<T1, T2> choice, Func<T1, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
+        public static Choice<TResult1, TResult2>
+            Map<T1, T2, TResult1, TResult2>(
+                this Choice<T1, T2> choice,
+                Func<T1, TResult1> selector1,
+                Func<T2, TResult2> selector2) =>
+            choice.Match(
+                a => Choice<TResult1, TResult2>.Choice1(selector1(a)),
+                b => Choice<TResult1, TResult2>.Choice2(selector2(b)));
 
-            return choice.Match(x => Choice1<TResult, T2>(selector(x)),
-                                Choice2<TResult, T2>);
-        }
+        public static Choice<TResult1, TResult2, TResult3>
+            Map<T1, T2, T3, TResult1, TResult2, TResult3>(
+                this Choice<T1, T2, T3> choice,
+                Func<T1, TResult1> selector1,
+                Func<T2, TResult2> selector2,
+                Func<T3, TResult3> selector3) =>
+            choice.Match(
+                a => Choice<TResult1, TResult2, TResult3>.Choice1(selector1(a)),
+                b => Choice<TResult1, TResult2, TResult3>.Choice2(selector2(b)),
+                c => Choice<TResult1, TResult2, TResult3>.Choice3(selector3(c)));
 
-        public static Choice<T1, TResult> Map2<T1, T2, TResult>(this Choice<T1, T2> choice, Func<T2, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
+        public static Choice<TResult1, TResult2, TResult3, TResult4>
+            Map<T1, T2, T3, T4, TResult1, TResult2, TResult3, TResult4>(
+                this Choice<T1, T2, T3, T4> choice,
+                Func<T1, TResult1> selector1,
+                Func<T2, TResult2> selector2,
+                Func<T3, TResult3> selector3,
+                Func<T4, TResult4> selector4) =>
+            choice.Match(
+                a => Choice<TResult1, TResult2, TResult3, TResult4>.Choice1(selector1(a)),
+                b => Choice<TResult1, TResult2, TResult3, TResult4>.Choice2(selector2(b)),
+                c => Choice<TResult1, TResult2, TResult3, TResult4>.Choice3(selector3(c)),
+                d => Choice<TResult1, TResult2, TResult3, TResult4>.Choice4(selector4(d)));
 
-            return choice.Match(Choice1<T1, TResult>,
-                                x => Choice2<T1, TResult>(selector(x)));
-        }
+        public static Choice<TResult, T2> Map1<T1, T2, TResult>(this Choice<T1, T2> choice, Func<T1, TResult> selector) =>
+            choice.Map(selector, x => x);
 
-        public static Choice<TResult, T2, T3> Map1<T1, T2, T3, TResult>(this Choice<T1, T2, T3> choice, Func<T1, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
+        public static Choice<T1, TResult> Map2<T1, T2, TResult>(this Choice<T1, T2> choice, Func<T2, TResult> selector) =>
+            choice.Map(x => x, selector);
 
-            return choice.Match(x => Choice1<TResult, T2, T3>(selector(x)),
-                                Choice2<TResult, T2, T3>,
-                                Choice3<TResult, T2, T3>);
-        }
+        public static Choice<TResult, T2, T3> Map1<T1, T2, T3, TResult>(this Choice<T1, T2, T3> choice, Func<T1, TResult> selector) =>
+            choice.Map(selector, x => x, x => x);
 
-        public static Choice<T1, TResult, T3> Map2<T1, T2, T3, TResult>(this Choice<T1, T2, T3> choice, Func<T2, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
-            return choice.Match(Choice1<T1, TResult, T3>,
-                                x => Choice2<T1, TResult, T3>(selector(x)),
-                                Choice3<T1, TResult, T3>);
-        }
+        public static Choice<T1, TResult, T3> Map2<T1, T2, T3, TResult>(this Choice<T1, T2, T3> choice, Func<T2, TResult> selector) =>
+            choice.Map(x => x, selector, x => x);
 
         public static Choice<T1, T2, TResult> Map3<T1, T2, T3, TResult>(this Choice<T1, T2, T3> choice, Func<T3, TResult> selector) =>
-            choice.Match(Choice1<T1, T2, TResult>,
-                         Choice2<T1, T2, TResult>,
-                         x => Choice3<T1, T2, TResult>(selector(x)));
+            choice.Map(x => x, x => x, selector);
 
-        public static Choice<TResult, T2, T3, T4> Map1<T1, T2, T3, T4, TResult>(this Choice<T1, T2, T3, T4> choice, Func<T1, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
+        public static Choice<TResult, T2, T3, T4> Map1<T1, T2, T3, T4, TResult>(this Choice<T1, T2, T3, T4> choice, Func<T1, TResult> selector) =>
+            choice.Map(selector, x => x, x => x, x => x);
 
-            return choice.Match(x => Choice1<TResult, T2, T3, T4>(selector(x)),
-                                Choice2<TResult, T2, T3, T4>,
-                                Choice3<TResult, T2, T3, T4>,
-                                Choice4<TResult, T2, T3, T4>);
-        }
+        public static Choice<T1, TResult, T3, T4> Map2<T1, T2, T3, T4, TResult>(this Choice<T1, T2, T3, T4> choice, Func<T2, TResult> selector) =>
+            choice.Map(x => x, selector, x => x, x => x);
 
-        public static Choice<T1, TResult, T3, T4> Map2<T1, T2, T3, T4, TResult>(this Choice<T1, T2, T3, T4> choice, Func<T2, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
+        public static Choice<T1, T2, TResult, T4> Map3<T1, T2, T3, T4, TResult>(this Choice<T1, T2, T3, T4> choice, Func<T3, TResult> selector) =>
+            choice.Map(x => x, x => x, selector, x => x);
 
-            return choice.Match(Choice1<T1, TResult, T3, T4>,
-                                x => Choice2<T1, TResult, T3, T4>(selector(x)),
-                                Choice3<T1, TResult, T3, T4>,
-                                Choice4<T1, TResult, T3, T4>);
-        }
-
-        public static Choice<T1, T2, TResult, T4> Map3<T1, T2, T3, T4, TResult>(this Choice<T1, T2, T3, T4> choice, Func<T3, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
-            return choice.Match(Choice1<T1, T2, TResult, T4>,
-                                Choice2<T1, T2, TResult, T4>,
-                                x => Choice3<T1, T2, TResult, T4>(selector(x)),
-                                Choice4<T1, T2, TResult, T4>);
-        }
-
-        public static Choice<T1, T2, T3, TResult> Map4<T1, T2, T3, T4, TResult>(this Choice<T1, T2, T3, T4> choice, Func<T4, TResult> selector)
-        {
-            if (choice == null) throw new ArgumentNullException(nameof(choice));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
-            return choice.Match(Choice1<T1, T2, T3, TResult>,
-                                Choice2<T1, T2, T3, TResult>,
-                                Choice3<T1, T2, T3, TResult>,
-                                x => Choice4<T1, T2, T3, TResult>(selector(x)));
-        }
+        public static Choice<T1, T2, T3, TResult> Map4<T1, T2, T3, T4, TResult>(this Choice<T1, T2, T3, T4> choice, Func<T4, TResult> selector) =>
+            choice.Map(x => x, x => x, x => x, selector);
 
         public static IReadOnlyList<Choice<T1, T2>>
             ToChoices<T1, T2>(this (T1, T2) tuple) => new[]
