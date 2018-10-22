@@ -112,6 +112,20 @@ var choiceTypes =
 Console.WriteLine(string.Join(", ", choiceTypes)); // Int32, String, Double
 ```
 
+Forbid a choice:
+
+```c#
+var choices = (42, "foobar", Math.PI).ToChoices();
+var last = choices.Select(c => c.Forbid2())
+                  .Last();
+Console.WriteLine(last);
+```
+
+Since the second choice is forbidden, an `InvalidOperationException` is
+thrown at run-time if such a choice appears in the data. Also, note that while
+the type of `choices` will be some list of `Choice<int, string, double>`, the
+type of `last` will be `Choice<int, double>`.
+
 
 ### LINQ
 

@@ -119,6 +119,80 @@ namespace Choices
                             Choice5<T1, T2, T3, T4, T5>);
         }
 
+        public static Choice<T2, T3> Forbid1<T1, T2, T3>(this Choice<T1, T2, T3> choice) =>
+            choice.Match(_ => throw new InvalidOperationException(),
+                         Choice1<T2, T3>,
+                         Choice2<T2, T3>);
+
+        public static Choice<T1, T3> Forbid2<T1, T2, T3>(this Choice<T1, T2, T3> choice) =>
+            choice.Match(Choice1<T1, T3>,
+                         _ => throw new InvalidOperationException(),
+                         Choice2<T1, T3>);
+
+        public static Choice<T1, T2> Forbid3<T1, T2, T3>(this Choice<T1, T2, T3> choice) =>
+            choice.Match(Choice1<T1, T2>,
+                         Choice2<T1, T2>,
+                         _ => throw new InvalidOperationException());
+
+        public static Choice<T2, T3, T4> Forbid1<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
+            choice.Match(_ => throw new InvalidOperationException(),
+                         Choice1<T2, T3, T4>,
+                         Choice2<T2, T3, T4>,
+                         Choice3<T2, T3, T4>);
+
+        public static Choice<T1, T3, T4> Forbid2<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
+            choice.Match(Choice1<T1, T3, T4>,
+                         _ => throw new InvalidOperationException(),
+                         Choice2<T1, T3, T4>,
+                         Choice3<T1, T3, T4>);
+
+        public static Choice<T1, T2, T4> Forbid3<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
+            choice.Match(Choice1<T1, T2, T4>,
+                         Choice2<T1, T2, T4>,
+                         _ => throw new InvalidOperationException(),
+                         Choice3<T1, T2, T4>);
+
+        public static Choice<T1, T2, T3> Forbid4<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
+            choice.Match(Choice1<T1, T2, T3>,
+                         Choice2<T1, T2, T3>,
+                         Choice3<T1, T2, T3>,
+                         _ => throw new InvalidOperationException());
+
+        public static Choice<T2, T3, T4, T5> Forbid1<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(_ => throw new InvalidOperationException(),
+                         Choice1<T2, T3, T4, T5>,
+                         Choice2<T2, T3, T4, T5>,
+                         Choice3<T2, T3, T4, T5>,
+                         Choice4<T2, T3, T4, T5>);
+
+        public static Choice<T1, T3, T4, T5> Forbid2<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(Choice1<T1, T3, T4, T5>,
+                         _ => throw new InvalidOperationException(),
+                         Choice2<T1, T3, T4, T5>,
+                         Choice3<T1, T3, T4, T5>,
+                         Choice4<T1, T3, T4, T5>);
+
+        public static Choice<T1, T2, T4, T5> Forbid3<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(Choice1<T1, T2, T4, T5>,
+                         Choice2<T1, T2, T4, T5>,
+                         _ => throw new InvalidOperationException(),
+                         Choice3<T1, T2, T4, T5>,
+                         Choice4<T1, T2, T4, T5>);
+
+        public static Choice<T1, T2, T3, T5> Forbid4<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(Choice1<T1, T2, T3, T5>,
+                         Choice2<T1, T2, T3, T5>,
+                         Choice3<T1, T2, T3, T5>,
+                         _ => throw new InvalidOperationException(),
+                         Choice4<T1, T2, T3, T5>);
+
+        public static Choice<T1, T2, T3, T4> Forbid5<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(Choice1<T1, T2, T3, T4>,
+                         Choice2<T1, T2, T3, T4>,
+                         Choice3<T1, T2, T3, T4>,
+                         Choice4<T1, T2, T3, T4>,
+                         _ => throw new InvalidOperationException());
+
         public static WhenPartial<T, TResult> When1<T, TResult>(Func<T, TResult> selector)
         {
             if (selector == null) throw new ArgumentNullException(nameof(selector));
