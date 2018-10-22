@@ -9,10 +9,10 @@
     <Authors>Atif Aziz</Authors>
     <Owners>Atif Aziz</Owners>
     <PackageProjectUrl>https://github.com/atifaziz/Choices</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/atifaziz/Choices.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageTags>choice;choices;either;result;union;monad;linq;fp;functional</PackageTags>
     <PackageLicenseUrl>https://github.com/atifaziz/Choices/blob/master/COPYING.txt</PackageLicenseUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,6 +27,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="all" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
