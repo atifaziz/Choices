@@ -20,6 +20,7 @@ namespace Choices
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using static Choice.New;
 
     static partial class Choice
@@ -235,6 +236,7 @@ namespace Choices
 
         public abstract override string ToString();
 
+        [DebuggerDisplay(nameof(Choice1Of2) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice1Of2 : Choice<T1, T2>
         {
             readonly T1 _value;
@@ -256,6 +258,7 @@ namespace Choices
             public override string ToString() => Choice.ToString(_value);
         }
 
+        [DebuggerDisplay(nameof(Choice2Of2) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice2Of2 : Choice<T1, T2>
         {
             readonly T2 _value;
@@ -295,6 +298,7 @@ namespace Choices
 
         public abstract override string ToString();
 
+        [DebuggerDisplay(nameof(Choice1Of3) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice1Of3 : Choice<T1, T2, T3>
         {
             readonly T1 _value;
@@ -317,6 +321,7 @@ namespace Choices
             public override string ToString() => Choice.ToString(_value);
         }
 
+        [DebuggerDisplay(nameof(Choice2Of3) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice2Of3 : Choice<T1, T2, T3>
         {
             readonly T2 _value;
@@ -339,6 +344,7 @@ namespace Choices
             public override string ToString() => Choice.ToString(_value);
         }
 
+        [DebuggerDisplay(nameof(Choice3Of3) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice3Of3 : Choice<T1, T2, T3>
         {
             readonly T3 _value;
@@ -382,6 +388,7 @@ namespace Choices
 
         public abstract override string ToString();
 
+        [DebuggerDisplay(nameof(Choice1Of4) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice1Of4 : Choice<T1, T2, T3, T4>
         {
             readonly T1 _value;
@@ -405,6 +412,7 @@ namespace Choices
             public override string ToString() => Choice.ToString(_value);
         }
 
+        [DebuggerDisplay(nameof(Choice2Of4) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice2Of4 : Choice<T1, T2, T3, T4>
         {
             readonly T2 _value;
@@ -428,6 +436,7 @@ namespace Choices
             public override string ToString() => Choice.ToString(_value);
         }
 
+        [DebuggerDisplay(nameof(Choice3Of4) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice3Of4 : Choice<T1, T2, T3, T4>
         {
             readonly T3 _value;
@@ -451,6 +460,7 @@ namespace Choices
             public override string ToString() => Choice.ToString(_value);
         }
 
+        [DebuggerDisplay(nameof(Choice4Of4) + ": {" + nameof(_value) + "}")]
         sealed partial class Choice4Of4 : Choice<T1, T2, T3, T4>
         {
             readonly T4 _value;
