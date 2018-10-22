@@ -29,16 +29,18 @@ namespace Choices.Tests
     using Int2 = Box2<int>;
     using Int3 = Box3<int>;
     using Int4 = Box4<int>;
+    using Int5 = Box5<int>;
     using Str1 = Box1<string>;
     using Str2 = Box2<string>;
     using Str3 = Box3<string>;
     using Str4 = Box4<string>;
+    using Str5 = Box5<string>;
 
     [TestFixture]
     partial class ChoiceOfTests
     {<#
     foreach (var d in
-        from d in Enumerable.Range(1, 4).Skip(1)
+        from d in Enumerable.Range(1, 5).Skip(1)
         let ds = Enumerable.Range(1, d)
         select new
         {

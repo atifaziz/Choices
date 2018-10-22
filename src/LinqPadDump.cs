@@ -39,4 +39,14 @@ namespace Choices
                   c => new { Chosen = 3, Value = (object) c },
                   d => new { Chosen = 4, Value = (object) d });
     }
+
+    partial class Choice<T1, T2, T3, T4, T5>
+    {
+        internal object ToDump() =>
+            Match(a => new { Chosen = 1, Value = (object) a },
+                  b => new { Chosen = 2, Value = (object) b },
+                  c => new { Chosen = 3, Value = (object) c },
+                  d => new { Chosen = 4, Value = (object) d },
+                  e => new { Chosen = 5, Value = (object) e });
+    }
 }

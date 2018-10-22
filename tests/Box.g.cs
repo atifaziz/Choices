@@ -71,4 +71,17 @@ namespace Choices.Tests
         public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(Value);
         public override string ToString() => FormattableString.Invariant($"{Value}");
     }
+
+    [DebuggerDisplay("{" + nameof(Value) + "}")]
+    sealed class Box5<T>
+    {
+        public readonly T Value;
+        public Box5(T value) => Value = value;
+        public static implicit operator Box5<T>(T x) => new Box5<T>(x);
+        public override bool Equals(object obj)
+            => obj is Box5<T> other
+            && EqualityComparer<T>.Default.Equals(Value, other.Value);
+        public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(Value);
+        public override string ToString() => FormattableString.Invariant($"{Value}");
+    }
 }

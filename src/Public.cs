@@ -4,6 +4,7 @@ namespace Choices
     public partial class Choice<T1, T2> {}
     public partial class Choice<T1, T2, T3> {}
     public partial class Choice<T1, T2, T3, T4> {}
+    public partial class Choice<T1, T2, T3, T4, T5> {}
 
     public partial class WhenPartial<T, TResult> {}
 

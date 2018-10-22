@@ -24,7 +24,7 @@ namespace Choices.Tests
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-<#  foreach (var n in from i in Enumerable.Range(1, 4)
+<#  foreach (var n in from i in Enumerable.Range(1, 5)
                       select i.ToString(CultureInfo.InvariantCulture)) { #>
 
     [DebuggerDisplay("{" + nameof(Value) + "}")]
