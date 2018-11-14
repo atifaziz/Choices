@@ -22,6 +22,6 @@ namespace Choices.Tests
     [TestFixture]
     public partial class ChoiceOfTests
     {
-        static Exception BadChoice() => new Exception("Invalid choice.");
+        static Exception BadChoice() => ChoiceTests.BadChoice();
     }
 }

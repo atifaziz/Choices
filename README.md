@@ -56,6 +56,12 @@ var rc = nc.Map(n => n.ToString(),  // = "82"
                 s => s.Length);     // = 6
 ```
 
+Swap a _couple_ of choices, which will swap values and thus the types:
+
+```c#
+Choice<string, int> swapped = Choice1<int, string>(42).Swap();
+```
+
 Use `Choice.If` to base the construction of choice based on some condition:
 
 ```c#

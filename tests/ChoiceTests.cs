@@ -19,10 +19,14 @@ namespace Choices.Tests
     using System;
     using NUnit.Framework;
     using static Choice.New;
+    using Int1 = Box1<int>;
+    using Int2 = Box2<int>;
 
     [TestFixture]
     public class ChoiceTests
     {
+        internal static Exception BadChoice() => new Exception("Invalid choice.");
+
         [Test]
         public void IfTrue()
         {
@@ -186,6 +190,26 @@ namespace Choices.Tests
 
             var r5 = map(Choice5<int, int, int, int, int>(42));
             Assert.That(r5, Is.EqualTo("5:2a"));
+        }
+
+        [Test]
+        public void SwapFirst()
+        {
+            var result =
+                Choice1<Int1, Int2>(42)
+                    .Swap()
+                    .Match(_ => throw BadChoice(), x => x);
+            Assert.That(result, Is.EqualTo(new Int1(42)));
+        }
+
+        [Test]
+        public void SwapSecond()
+        {
+            var result =
+                Choice2<Int1, Int2>(42)
+                    .Swap()
+                    .Match(x => x, _ => throw BadChoice());
+            Assert.That(result, Is.EqualTo(new Int2(42)));
         }
     }
 }

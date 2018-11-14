@@ -74,6 +74,9 @@ namespace Choices
             */
         }
 
+        public static Choice<T2, T1> Swap<T1, T2>(this Choice<T1, T2> choice) =>
+            choice.Match(Choice2<T2, T1>, Choice1<T2, T1>);
+
         public static Choice<T1, T2> If<T1, T2>(bool flag, Func<T1> t, Func<T2> f)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
