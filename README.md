@@ -118,6 +118,16 @@ var choiceTypes =
 Console.WriteLine(string.Join(", ", choiceTypes)); // Int32, String, Double
 ```
 
+Move a choice to the right, resulting in always a choice of couples where the
+first choice is nesting of the remainder:
+
+```c#
+var choice = Choice1<int, string, char>(42);
+Choice<Choice<string, char>, int> r1 = choice.Right1();
+Choice<Choice<int, char>, string> r2 = choice.Right2();
+Choice<Choice<int, string>, char> r3 = choice.Right3();
+```
+
 Forbid a choice:
 
 ```c#
