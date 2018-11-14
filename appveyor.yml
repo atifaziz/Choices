@@ -22,6 +22,8 @@ test_script:
           ./test.sh
           curl -s https://codecov.io/bash > codecov
           chmod +x codecov
+          # remove following monkey-patch post merge of PR codecov/codecov-bash#138
+          curl -s https://github.com/codecov/codecov-bash/commit/14662d32a4862918c31efafe4b450de1305a38e1.patch | git apply
           ./codecov -f ./tests/coverage.opencover.xml
       }
 artifacts:
