@@ -102,6 +102,14 @@ namespace Choices.Tests
                 Assert.That(result, Is.EqualTo(Choice<#= n.Text #><<#= d.TStrs #>>(new Str<#= n.Text #>("2a"))));
             }
 
+            [Test]
+            public void Choice<#= n.Text #>GetHashCode()
+            {
+                var choice1 = Choice<#= n.Text #><<#= d.TInts #>>(42);
+                var choice2 = Choice<#= n.Ord == 1 ? "2" : "1" #><<#= d.TInts #>>(42);
+                Assert.That(choice1.GetHashCode(), Is.Not.EqualTo(choice2.GetHashCode()));
+            }
+
             public class Choice<#= n.Text #>Equality
             {
                 [Test]
