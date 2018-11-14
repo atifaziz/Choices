@@ -161,5 +161,31 @@ namespace Choices.Tests
             var r4 = map(Choice4<int, string, DateTime, char>('*'));
             Assert.That(r4, Is.EqualTo(42));
         }
+
+        [Test]
+        public void When5()
+        {
+            var map = Choice.When1((int x) => "1:" + x.ToString("x"))
+                            .When2((int x) => "2:" + x.ToString("x"))
+                            .When3((int x) => "3:" + x.ToString("x"))
+                            .When4((int x) => "4:" + x.ToString("x"))
+                            .When5((int x) => "5:" + x.ToString("x"));
+            Assert.That(map, Is.Not.Null);
+
+            var r1 = map(Choice1<int, int, int, int, int>(42));
+            Assert.That(r1, Is.EqualTo("1:2a"));
+
+            var r2 = map(Choice2<int, int, int, int, int>(42));
+            Assert.That(r2, Is.EqualTo("2:2a"));
+
+            var r3 = map(Choice3<int, int, int, int, int>(42));
+            Assert.That(r3, Is.EqualTo("3:2a"));
+
+            var r4 = map(Choice4<int, int, int, int, int>(42));
+            Assert.That(r4, Is.EqualTo("4:2a"));
+
+            var r5 = map(Choice5<int, int, int, int, int>(42));
+            Assert.That(r5, Is.EqualTo("5:2a"));
+        }
     }
 }
