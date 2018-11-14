@@ -17,7 +17,6 @@
 namespace Choices.Tests
 {
     using System;
-    using System.Globalization;
     using NUnit.Framework;
     using static Choice.New;
     using Int1 = Box1<int>;
