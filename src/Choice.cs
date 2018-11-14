@@ -122,15 +122,6 @@ namespace Choices
                             Choice5<T1, T2, T3, T4, T5>);
         }
 
-        public static Choice<T1, Choice<T2, T3>> Left1<T1, T2, T3>(this Choice<T1, T2, T3> choice) =>
-            choice.Right1().Swap();
-
-        public static Choice<T2, Choice<T1, T3>> Left2<T1, T2, T3>(this Choice<T1, T2, T3> choice) =>
-            choice.Right2().Swap();
-
-        public static Choice<T3, Choice<T1, T2>> Left3<T1, T2, T3>(this Choice<T1, T2, T3> choice) =>
-            choice.Right3().Swap();
-
         public static Choice<Choice<T2, T3>, T1> Right1<T1, T2, T3>(this Choice<T1, T2, T3> choice) =>
             choice.Match(Choice<Choice<T2, T3>, T1>.Choice2,
                          b => Choice<Choice<T2, T3>, T1>.Choice1(Choice<T2, T3>.Choice1(b)),
@@ -145,18 +136,6 @@ namespace Choices
             choice.Match(a => Choice<Choice<T1, T2>, T3>.Choice1(Choice<T1, T2>.Choice1(a)),
                          b => Choice<Choice<T1, T2>, T3>.Choice1(Choice<T1, T2>.Choice2(b)),
                          Choice<Choice<T1, T2>, T3>.Choice2);
-
-        public static Choice<T1, Choice<T2, T3, T4>> Left1<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
-            choice.Right1().Swap();
-
-        public static Choice<T2, Choice<T1, T3, T4>> Left2<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
-            choice.Right2().Swap();
-
-        public static Choice<T3, Choice<T1, T2, T4>> Left3<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
-            choice.Right3().Swap();
-
-        public static Choice<T4, Choice<T1, T2, T3>> Left4<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
-            choice.Right4().Swap();
 
         public static Choice<Choice<T2, T3, T4>, T1> Right1<T1, T2, T3, T4>(this Choice<T1, T2, T3, T4> choice) =>
             choice.Match(Choice<Choice<T2, T3, T4>, T1>.Choice2,
