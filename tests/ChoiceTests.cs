@@ -221,35 +221,155 @@ namespace Choices.Tests
             return default;
         }
 
-        static void TestLeftRight<TExpected, TChoice, TL, TR>(
+        static void Test<TExpected, TChoice, T1, T2>(
             TExpected expected,
-            Func<TExpected, TChoice> cf,
-            Func<TChoice, Choice<TL, TR>> lrf,
-            Func<TL, TExpected> l,
-            Func<TR, TExpected> r)
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2>> mapper,
+            Func<T1, TExpected> selector) =>
+            Test(expected, factory, mapper, selector, _ => AssertNotCalled<TExpected>());
+
+        static void Test<TExpected, TChoice, T1, T2>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2>> mapper,
+            Func<T2, TExpected> selector) =>
+            Test(expected, factory, mapper, _ => AssertNotCalled<TExpected>(), selector);
+
+        static void Test<TExpected, TChoice, T>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<TExpected, T>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T, TExpected>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T1, T2>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2>> mapper,
+            Func<T1, TExpected> selector1,
+            Func<T2, TExpected> selector2)
         {
-            Assert.That(lrf(cf(expected)).Match(l, r), Is.EqualTo(expected));
+            Assert.That(mapper(factory(expected)).Match(selector1, selector2), Is.EqualTo(expected));
         }
 
-        static void TestLeft<TExpected, TChoice, TL, TR>(
+        static void Test<TExpected, TChoice, T1, T2, T3>(
             TExpected expected,
-            Func<TExpected, TChoice> cf,
-            Func<TChoice, Choice<TL, TR>> ef,
-            Func<TL, TExpected> lf) =>
-            TestLeftRight(expected, cf, ef, lf, _ => AssertNotCalled<TExpected>());
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3>> mapper,
+            Func<T1, TExpected> selector) =>
+            Test(expected, factory, mapper, selector, _ => AssertNotCalled<TExpected>(), _ => AssertNotCalled<TExpected>());
 
-        static void TestRight<TExpected, TChoice, TL>(
+        static void Test<TExpected, TChoice, T1, T2, T3>(
             TExpected expected,
-            Func<TExpected, TChoice> cf,
-            Func<TChoice, Choice<TL, TExpected>> ef) =>
-            TestRight(expected, cf, ef, x => x);
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3>> mapper,
+            Func<T2, TExpected> selector) =>
+            Test(expected, factory, mapper, _ => AssertNotCalled<TExpected>(), selector, _ => AssertNotCalled<TExpected>());
 
-        static void TestRight<TExpected, TChoice, TL, TR>(
+        static void Test<TExpected, TChoice, T1, T2, T3>(
             TExpected expected,
-            Func<TExpected, TChoice> cf,
-            Func<TChoice, Choice<TL, TR>> ef,
-            Func<TR, TExpected> rf) =>
-            TestLeftRight(expected, cf, ef, _ => AssertNotCalled<TExpected>(), rf);
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3>> mapper,
+            Func<T3, TExpected> selector) =>
+            Test(expected, factory, mapper, _ => AssertNotCalled<TExpected>(), _ => AssertNotCalled<TExpected>(), selector);
+
+        static void Test<TExpected, TChoice, T1, T2>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<TExpected, T1, T2>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T1, T2>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, TExpected, T2>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T1, T2>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, TExpected>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T1, T2, T3>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3>> mapper,
+            Func<T1, TExpected> selector1,
+            Func<T2, TExpected> selector2,
+            Func<T3, TExpected> selector3)
+        {
+            Assert.That(mapper(factory(expected)).Match(selector1, selector2, selector3), Is.EqualTo(expected));
+        }
+
+        static void Test<TExpected, TChoice, T1, T2, T3, T4>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3, T4>> mapper,
+            Func<T1, TExpected> selector) =>
+            Test(expected, factory, mapper, selector, _ => AssertNotCalled<TExpected>(), _ => AssertNotCalled<TExpected>(), _ => AssertNotCalled<TExpected>());
+
+        static void Test<TExpected, TChoice, T1, T2, T3, T4>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3, T4>> mapper,
+            Func<T2, TExpected> selector) =>
+            Test(expected, factory, mapper, _ => AssertNotCalled<TExpected>(), selector, _ => AssertNotCalled<TExpected>(), _ => AssertNotCalled<TExpected>());
+
+        static void Test<TExpected, TChoice, T1, T2, T3, T4>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3, T4>> mapper,
+            Func<T3, TExpected> selector) =>
+            Test(expected, factory, mapper, _ => AssertNotCalled<TExpected>(), _ => AssertNotCalled<TExpected>(), selector, _ => AssertNotCalled<TExpected>());
+
+        static void Test<TExpected, TChoice, T1, T2, T3, T4>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3, T4>> mapper,
+            Func<T4, TExpected> selector) =>
+            Test(expected, factory, mapper, _ => AssertNotCalled<TExpected>(), _ => AssertNotCalled<TExpected>(), _ => AssertNotCalled<TExpected>(), selector);
+
+        static void Test<TExpected, TChoice, T1, T2, T3>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<TExpected, T1, T2, T3>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T1, T2, T3>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, TExpected, T2, T3>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T1, T2, T3>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, TExpected, T3>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T1, T2, T3>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3, TExpected>> selector) =>
+            Test(expected, factory, selector, x => x);
+
+        static void Test<TExpected, TChoice, T1, T2, T3, T4>(
+            TExpected expected,
+            Func<TExpected, TChoice> factory,
+            Func<TChoice, Choice<T1, T2, T3, T4>> mapper,
+            Func<T1, TExpected> selector1,
+            Func<T2, TExpected> selector2,
+            Func<T3, TExpected> selector3,
+            Func<T4, TExpected> selector4)
+        {
+            Assert.That(mapper(factory(expected)).Match(selector1, selector2, selector3, selector4), Is.EqualTo(expected));
+        }
 
         [TestFixture]
         public class ChoiceOf3
@@ -260,13 +380,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestRight(new Int1(42), Choice1<Int1, Int2, Int3>, c => c.Right1());
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3>, c => c.Right1());
                 }
 
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3>,
                              c => c.Right1(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int2>()));
                 }
@@ -274,7 +394,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3>,
                              c => c.Right1(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), x => x));
                 }
@@ -286,7 +406,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3>,
                              c => c.Right2(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>()));
                 }
@@ -294,13 +414,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestRight(new Int2(42), Choice2<Int1, Int2, Int3>, c => c.Right2());
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3>, c => c.Right2());
                 }
 
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3>,
                              c => c.Right2(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), x => x));
                 }
@@ -312,7 +432,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3>,
                              c => c.Right3(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>()));
                 }
@@ -320,7 +440,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3>,
                              c => c.Right3(),
                              r => r.Match(_ => AssertNotCalled<Int2>(), x => x));
                 }
@@ -328,7 +448,76 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestRight(new Int3(42), Choice3<Int1, Int2, Int3>, c => c.Right3());
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3>, c => c.Right3());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid1
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice1<Int1, Int2, Int3>(42).Forbid1());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3>, c => c.Forbid1());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3>, c => c.Forbid1());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid2
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3>, c => c.Forbid2());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice2<Int1, Int2, Int3>(42).Forbid2());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3>, c => c.Forbid2());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid3
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3>, c => c.Forbid3());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3>, c => c.Forbid3());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice3<Int1, Int2, Int3>(42).Forbid3());
                 }
             }
         }
@@ -342,13 +531,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestRight(new Int1(42), Choice1<Int1, Int2, Int3, Int4>, c => c.Right1());
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4>, c => c.Right1());
                 }
 
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3, Int4>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4>,
                              c => c.Right1(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int2>(), _ => AssertNotCalled<Int2>()));
                 }
@@ -356,7 +545,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3, Int4>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4>,
                              c => c.Right1(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), x => x, _ => AssertNotCalled<Int3>()));
                 }
@@ -364,7 +553,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice4()
                 {
-                    TestLeft(new Int4(42), Choice4<Int1, Int2, Int3, Int4>,
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4>,
                              c => c.Right1(),
                              r => r.Match(_ => AssertNotCalled<Int4>(), _ => AssertNotCalled<Int4>(), x => x));
                 }
@@ -376,7 +565,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3, Int4>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4>,
                              c => c.Right2(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>()));
                 }
@@ -384,13 +573,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestRight(new Int2(42), Choice2<Int1, Int2, Int3, Int4>, c => c.Right2());
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4>, c => c.Right2());
                 }
 
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3, Int4>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4>,
                              c => c.Right2(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), x => x, _ => AssertNotCalled<Int3>()));
                 }
@@ -398,7 +587,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice4()
                 {
-                    TestLeft(new Int4(42), Choice4<Int1, Int2, Int3, Int4>,
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4>,
                              c => c.Right2(),
                              r => r.Match(_ => AssertNotCalled<Int4>(), _ => AssertNotCalled<Int4>(), x => x));
                 }
@@ -410,7 +599,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3, Int4>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4>,
                              c => c.Right3(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>()));
                 }
@@ -418,7 +607,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3, Int4>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4>,
                              c => c.Right3(),
                              r => r.Match(_ => AssertNotCalled<Int2>(), x => x, _ => AssertNotCalled<Int2>()));
                 }
@@ -426,13 +615,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestRight(new Int3(42), Choice3<Int1, Int2, Int3, Int4>, c => c.Right3());
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4>, c => c.Right3());
                 }
 
                 [Test]
                 public void Choice4()
                 {
-                    TestLeft(new Int4(42), Choice4<Int1, Int2, Int3, Int4>,
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4>,
                              c => c.Right3(),
                              r => r.Match(_ => AssertNotCalled<Int4>(), _ => AssertNotCalled<Int4>(), x => x));
                 }
@@ -444,7 +633,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3, Int4>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4>,
                              c => c.Right4(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>()));
                 }
@@ -452,7 +641,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3, Int4>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4>,
                              c => c.Right4(),
                              r => r.Match(_ => AssertNotCalled<Int2>(), x => x, _ => AssertNotCalled<Int2>()));
                 }
@@ -460,7 +649,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3, Int4>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4>,
                              c => c.Right4(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), _ => AssertNotCalled<Int3>(), x => x));
                 }
@@ -468,7 +657,124 @@ namespace Choices.Tests
                 [Test]
                 public void Choice4()
                 {
-                    TestRight(new Int4(42), Choice4<Int1, Int2, Int3, Int4>, c => c.Right4());
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4>, c => c.Right4());
+                }
+
+            }
+
+            [TestFixture]
+            public class Forbid1
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice1<Int1, Int2, Int3, Int4>(42).Forbid1());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4>, c => c.Forbid1());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4>, c => c.Forbid1());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4>, c => c.Forbid1());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid2
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4>, c => c.Forbid2());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice2<Int1, Int2, Int3, Int4>(42).Forbid2());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4>, c => c.Forbid2());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4>, c => c.Forbid2());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid3
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4>, c => c.Forbid3());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4>, c => c.Forbid3());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice3<Int1, Int2, Int3, Int4>(42).Forbid3());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4>, c => c.Forbid3());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid4
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4>, c => c.Forbid4());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4>, c => c.Forbid4());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4>, c => c.Forbid4());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice4<Int1, Int2, Int3, Int4>(42).Forbid4());
                 }
             }
         }
@@ -482,13 +788,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestRight(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>, c => c.Right1());
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>, c => c.Right1());
                 }
 
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right1(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int2>(), _ => AssertNotCalled<Int2>(), _ => AssertNotCalled<Int2>()));
                 }
@@ -496,7 +802,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right1(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), x => x, _ => AssertNotCalled<Int3>(), _ => AssertNotCalled<Int3>()));
                 }
@@ -504,7 +810,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice4()
                 {
-                    TestLeft(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right1(),
                              r => r.Match(_ => AssertNotCalled<Int4>(), _ => AssertNotCalled<Int4>(), x => x, _ => AssertNotCalled<Int4>()));
                 }
@@ -512,7 +818,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice5()
                 {
-                    TestLeft(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right1(),
                              r => r.Match(_ => AssertNotCalled<Int5>(), _ => AssertNotCalled<Int5>(), _ => AssertNotCalled<Int5>(), x => x));
                 }
@@ -524,7 +830,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right2(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>()));
                 }
@@ -532,13 +838,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestRight(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>, c => c.Right2());
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>, c => c.Right2());
                 }
 
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right2(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), x => x, _ => AssertNotCalled<Int3>(), _ => AssertNotCalled<Int3>()));
                 }
@@ -546,7 +852,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice4()
                 {
-                    TestLeft(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right2(),
                              r => r.Match(_ => AssertNotCalled<Int4>(), _ => AssertNotCalled<Int4>(), x => x, _ => AssertNotCalled<Int4>()));
                 }
@@ -554,7 +860,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice5()
                 {
-                    TestLeft(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right2(),
                              r => r.Match(_ => AssertNotCalled<Int5>(), _ => AssertNotCalled<Int5>(), _ => AssertNotCalled<Int5>(), x => x));
                 }
@@ -566,7 +872,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right3(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>()));
                 }
@@ -574,7 +880,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right3(),
                              r => r.Match(_ => AssertNotCalled<Int2>(), x => x, _ => AssertNotCalled<Int2>(), _ => AssertNotCalled<Int2>()));
                 }
@@ -582,13 +888,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestRight(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>, c => c.Right3());
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>, c => c.Right3());
                 }
 
                 [Test]
                 public void Choice4()
                 {
-                    TestLeft(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right3(),
                              r => r.Match(_ => AssertNotCalled<Int4>(), _ => AssertNotCalled<Int4>(), x => x, _ => AssertNotCalled<Int4>()));
                 }
@@ -596,7 +902,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice5()
                 {
-                    TestLeft(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right3(),
                              r => r.Match(_ => AssertNotCalled<Int5>(), _ => AssertNotCalled<Int5>(), _ => AssertNotCalled<Int5>(), x => x));
                 }
@@ -608,7 +914,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right4(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>()));
                 }
@@ -616,7 +922,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right4(),
                              r => r.Match(_ => AssertNotCalled<Int2>(), x => x, _ => AssertNotCalled<Int2>(), _ => AssertNotCalled<Int2>()));
                 }
@@ -624,7 +930,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right4(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), _ => AssertNotCalled<Int3>(), x => x, _ => AssertNotCalled<Int3>()));
                 }
@@ -632,13 +938,13 @@ namespace Choices.Tests
                 [Test]
                 public void Choice4()
                 {
-                    TestRight(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>, c => c.Right4());
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>, c => c.Right4());
                 }
 
                 [Test]
                 public void Choice5()
                 {
-                    TestLeft(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right4(),
                              r => r.Match(_ => AssertNotCalled<Int5>(), _ => AssertNotCalled<Int5>(), _ => AssertNotCalled<Int5>(), x => x));
                 }
@@ -650,7 +956,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice1()
                 {
-                    TestLeft(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right5(),
                              r => r.Match(x => x, _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>(), _ => AssertNotCalled<Int1>()));
                 }
@@ -658,7 +964,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice2()
                 {
-                    TestLeft(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right5(),
                              r => r.Match(_ => AssertNotCalled<Int2>(), x => x, _ => AssertNotCalled<Int2>(), _ => AssertNotCalled<Int2>()));
                 }
@@ -666,7 +972,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice3()
                 {
-                    TestLeft(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right5(),
                              r => r.Match(_ => AssertNotCalled<Int3>(), _ => AssertNotCalled<Int3>(), x => x, _ => AssertNotCalled<Int3>()));
                 }
@@ -674,7 +980,7 @@ namespace Choices.Tests
                 [Test]
                 public void Choice4()
                 {
-                    TestLeft(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>,
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>,
                              c => c.Right5(),
                              r => r.Match(_ => AssertNotCalled<Int4>(), _ => AssertNotCalled<Int4>(), _ => AssertNotCalled<Int4>(), x => x));
                 }
@@ -682,7 +988,182 @@ namespace Choices.Tests
                 [Test]
                 public void Choice5()
                 {
-                    TestRight(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>, c => c.Right5());
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>, c => c.Right5());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid1
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice1<Int1, Int2, Int3, Int4, Int5>(42).Forbid1());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid1());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid1());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid1());
+                }
+
+                [Test]
+                public void Choice5()
+                {
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid1());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid2
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid2());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice2<Int1, Int2, Int3, Int4, Int5>(42).Forbid2());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid2());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid2());
+                }
+
+                [Test]
+                public void Choice5()
+                {
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid2());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid3
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid3());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid3());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice3<Int1, Int2, Int3, Int4, Int5>(42).Forbid3());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid3());
+                }
+
+                [Test]
+                public void Choice5()
+                {
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid3());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid4
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid4());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid4());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid4());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice4<Int1, Int2, Int3, Int4, Int5>(42).Forbid4());
+                }
+
+                [Test]
+                public void Choice5()
+                {
+                    Test(new Int5(42), Choice5<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid4());
+                }
+            }
+
+            [TestFixture]
+            public class Forbid5
+            {
+                [Test]
+                public void Choice1()
+                {
+                    Test(new Int1(42), Choice1<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid5());
+                }
+
+                [Test]
+                public void Choice2()
+                {
+                    Test(new Int2(42), Choice2<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid5());
+                }
+
+                [Test]
+                public void Choice3()
+                {
+                    Test(new Int3(42), Choice3<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid5());
+                }
+
+                [Test]
+                public void Choice4()
+                {
+                    Test(new Int4(42), Choice4<Int1, Int2, Int3, Int4, Int5>, c => c.Forbid5());
+                }
+
+                [Test]
+                public void Choice5()
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                        Choice5<Int1, Int2, Int3, Int4, Int5>(42).Forbid5());
                 }
             }
         }
