@@ -161,6 +161,41 @@ namespace Choices
                          c => Choice<Choice<T1, T2, T3>, T4>.Choice1(Choice<T1, T2, T3>.Choice3(c)),
                          Choice<Choice<T1, T2, T3>, T4>.Choice2);
 
+        public static Choice<Choice<T2, T3, T4, T5>, T1> Right1<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(Choice<Choice<T2, T3, T4, T5>, T1>.Choice2,
+                         b => Choice<Choice<T2, T3, T4, T5>, T1>.Choice1(Choice<T2, T3, T4, T5>.Choice1(b)),
+                         c => Choice<Choice<T2, T3, T4, T5>, T1>.Choice1(Choice<T2, T3, T4, T5>.Choice2(c)),
+                         d => Choice<Choice<T2, T3, T4, T5>, T1>.Choice1(Choice<T2, T3, T4, T5>.Choice3(d)),
+                         e => Choice<Choice<T2, T3, T4, T5>, T1>.Choice1(Choice<T2, T3, T4, T5>.Choice4(e)));
+
+        public static Choice<Choice<T1, T3, T4, T5>, T2> Right2<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(a => Choice<Choice<T1, T3, T4, T5>, T2>.Choice1(Choice<T1, T3, T4, T5>.Choice1(a)),
+                         Choice<Choice<T1, T3, T4, T5>, T2>.Choice2,
+                         c => Choice<Choice<T1, T3, T4, T5>, T2>.Choice1(Choice<T1, T3, T4, T5>.Choice2(c)),
+                         d => Choice<Choice<T1, T3, T4, T5>, T2>.Choice1(Choice<T1, T3, T4, T5>.Choice3(d)),
+                         e => Choice<Choice<T1, T3, T4, T5>, T2>.Choice1(Choice<T1, T3, T4, T5>.Choice4(e)));
+
+        public static Choice<Choice<T1, T2, T4, T5>, T3> Right3<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(a => Choice<Choice<T1, T2, T4, T5>, T3>.Choice1(Choice<T1, T2, T4, T5>.Choice1(a)),
+                         b => Choice<Choice<T1, T2, T4, T5>, T3>.Choice1(Choice<T1, T2, T4, T5>.Choice2(b)),
+                         Choice<Choice<T1, T2, T4, T5>, T3>.Choice2,
+                         d => Choice<Choice<T1, T2, T4, T5>, T3>.Choice1(Choice<T1, T2, T4, T5>.Choice3(d)),
+                         e => Choice<Choice<T1, T2, T4, T5>, T3>.Choice1(Choice<T1, T2, T4, T5>.Choice4(e)));
+
+        public static Choice<Choice<T1, T2, T3, T5>, T4> Right4<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(a => Choice<Choice<T1, T2, T3, T5>, T4>.Choice1(Choice<T1, T2, T3, T5>.Choice1(a)),
+                         b => Choice<Choice<T1, T2, T3, T5>, T4>.Choice1(Choice<T1, T2, T3, T5>.Choice2(b)),
+                         c => Choice<Choice<T1, T2, T3, T5>, T4>.Choice1(Choice<T1, T2, T3, T5>.Choice3(c)),
+                         Choice<Choice<T1, T2, T3, T5>, T4>.Choice2,
+                         e => Choice<Choice<T1, T2, T3, T5>, T4>.Choice1(Choice<T1, T2, T3, T5>.Choice4(e)));
+
+        public static Choice<Choice<T1, T2, T3, T4>, T5> Right5<T1, T2, T3, T4, T5>(this Choice<T1, T2, T3, T4, T5> choice) =>
+            choice.Match(a => Choice<Choice<T1, T2, T3, T4>, T5>.Choice1(Choice<T1, T2, T3, T4>.Choice1(a)),
+                         b => Choice<Choice<T1, T2, T3, T4>, T5>.Choice1(Choice<T1, T2, T3, T4>.Choice2(b)),
+                         c => Choice<Choice<T1, T2, T3, T4>, T5>.Choice1(Choice<T1, T2, T3, T4>.Choice3(c)),
+                         d => Choice<Choice<T1, T2, T3, T4>, T5>.Choice1(Choice<T1, T2, T3, T4>.Choice4(d)),
+                         Choice<Choice<T1, T2, T3, T4>, T5>.Choice2);
+
         public static Choice<T2, T3> Forbid1<T1, T2, T3>(this Choice<T1, T2, T3> choice) =>
             choice.Match(_ => throw new InvalidOperationException(),
                          Choice1<T2, T3>,
