@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/atifaziz/Choices</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageTags>choice;choices;either;result;union;monad;linq;fp;functional</PackageTags>
-    <PackageLicenseUrl>https://github.com/atifaziz/Choices/blob/master/COPYING.txt</PackageLicenseUrl>
+    <PackageLicenseFile>COPYING.txt</PackageLicenseFile>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
@@ -22,9 +22,7 @@
     <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\COPYING.txt" Link="COPYING.txt">
-      <PackagePath />
-    </Content>
+    <None Include="..\COPYING.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="all" />
