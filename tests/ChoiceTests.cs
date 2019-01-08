@@ -120,6 +120,47 @@ namespace Choices.Tests
             Assert.That(actual, Is.EqualTo(choices[i - 1]));
         }
 
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        public void If4(int i)
+        {
+            Assert.That(i, Is.GreaterThanOrEqualTo(1));
+            Assert.That(i, Is.LessThanOrEqualTo(5));
+
+            var v = new Int1(42);
+            var w = new Int2(42);
+            var x = new Int3(42);
+            var y = new Int4(42);
+            var z = new Int5(42);
+
+            var choices = new object[] { v, w, x, y, z };
+
+            var choice =
+                Choice.If(
+                    i == 1,
+                    () => v,
+                    () =>
+                        Choice.If(
+                            i == 2,
+                            () => w,
+                            () =>
+                                Choice.If(
+                                    i == 3,
+                                    () => x,
+                                    () =>
+                                        Choice.If(
+                                            i == 4,
+                                            () => y,
+                                            () => z))));
+
+            Assert.That(choice, Is.Not.Null);
+            var actual = choice.Match(a => (object) a, b => b, c => c, d => d, e => e);
+            Assert.That(actual, Is.EqualTo(choices[i - 1]));
+        }
+
         [Test]
         public void When1()
         {
