@@ -34,77 +34,90 @@ namespace Choices.Tests
         public void IfTrue()
         {
             var choice =
-                Choice.If<int, string>(
+                Choice.If<Int1, Int2>(
                     true,
                     () => 42,
                     () => throw new NotImplementedException());
             Assert.That(choice, Is.Not.Null);
             var result = choice.Match(n => (object) n, s => s);
-            Assert.That(result, Is.EqualTo(42));
+            Assert.That(result, Is.EqualTo(new Int1(42)));
         }
 
         [Test]
         public void IfFalse()
         {
             var choice =
-                Choice.If<int, string>(
+                Choice.If<Int1, Int2>(
                     false,
                     () => throw new NotImplementedException(),
-                    () => "foobar");
+                    () => 42);
             Assert.That(choice, Is.Not.Null);
-            var result = choice.Match(n => (object) n, s => s);
-            Assert.That(result, Is.EqualTo("foobar"));
+            var result = choice.Match(a => (object) a, b => b);
+            Assert.That(result, Is.EqualTo(new Int2(42)));
         }
 
-        [TestCase(1, 42)]
-        [TestCase(2, "foo")]
-        [TestCase(3, 4.2)]
-        public void If2(int i, object expected)
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void If2(int i)
         {
             Assert.That(i, Is.GreaterThanOrEqualTo(1));
             Assert.That(i, Is.LessThanOrEqualTo(3));
 
+            var x = new Int1(42);
+            var y = new Int2(42);
+            var z = new Int3(42);
+
+            var choices = new object[] { x, y, z };
+
             var choice =
                 Choice.If(
                     i == 1,
-                    () => 42,
+                    () => x,
                     () =>
                         Choice.If(
                             i == 2,
-                            () => "foo",
-                            () => 4.2));
+                            () => y,
+                            () => z));
 
             Assert.That(choice, Is.Not.Null);
-            var actual = choice.Match(n => (object) n, s => s, d => d);
-            Assert.That(actual, Is.EqualTo(expected));
+            var actual = choice.Match(a => (object) a, b => b, c => c);
+            Assert.That(actual, Is.EqualTo(choices[i - 1]));
         }
 
-        [TestCase(1, 42)]
-        [TestCase(2, "foo")]
-        [TestCase(3, 4.2)]
-        [TestCase(4, '*')]
-        public void If3(int i, object expected)
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        public void If3(int i)
         {
             Assert.That(i, Is.GreaterThanOrEqualTo(1));
             Assert.That(i, Is.LessThanOrEqualTo(4));
 
+            var w = new Int1(42);
+            var x = new Int2(42);
+            var y = new Int3(42);
+            var z = new Int4(42);
+
+            var choices = new object[] { w, x, y, z };
+
             var choice =
                 Choice.If(
                     i == 1,
-                    () => 42,
+                    () => w,
                     () =>
                         Choice.If(
                             i == 2,
-                            () => "foo",
+                            () => x,
                             () =>
                                 Choice.If(
                                     i == 3,
-                                    () => 4.2,
-                                    () => '*')));
+                                    () => y,
+                                    () => z)));
 
             Assert.That(choice, Is.Not.Null);
-            var actual = choice.Match(n => (object) n, s => s, d => d, ch => ch);
-            Assert.That(actual, Is.EqualTo(expected));
+            var actual = choice.Match(a => (object) a, b => b, c => c, d => d);
+            Assert.That(actual, Is.EqualTo(choices[i - 1]));
         }
 
         [Test]
