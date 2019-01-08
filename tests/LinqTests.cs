@@ -191,27 +191,45 @@ namespace Choices.Linq.Left.Tests
             Assert.That(result, Is.EqualTo(42));
         }
 
-        [Test]
-        public void BindLeft()
+        static void BindLeft(Func<Choice<int, FormatException>, Func<int, Choice<object, FormatException>>, Choice<object, FormatException>> binder)
         {
-            var error =
-                TryParseInt32("forty-two")
-                    .Bind(_ => AssertNotCalled<Choice<object, FormatException>>())
-                    .Match(_ => AssertNotCalled<FormatException>(), e => e);
+            var choice = binder(TryParseInt32("forty-two"), _ => AssertNotCalled<Choice<object, FormatException>>());
+            var error = choice.Match(_ => AssertNotCalled<FormatException>(), e => e);
 
             Assert.That(error, Is.InstanceOf(typeof(FormatException)));
             Assert.That(error.Message, Is.EqualTo("\"forty-two\" is not a valid signed integer."));
         }
 
         [Test]
-        public void BindRight()
+        public void BindLeft()
         {
-            var n =
-                TryParseInt32("1970")
-                    .Bind(y => Choice1<DateTime, FormatException>(new DateTime(y, 1, 1)))
-                    .Match(d => d, _ => AssertNotCalled<DateTime>());
+            BindLeft(LeftResult.Bind);
+        }
+
+        [Test]
+        public void SelectManyLeft()
+        {
+            BindLeft(LeftResult.SelectMany);
+        }
+
+        static void BindRight(Func<Choice<int, FormatException>, Func<int, Choice<DateTime, FormatException>>, Choice<DateTime, FormatException>> binder)
+        {
+            var choice = binder(TryParseInt32("1970"), y => Choice1<DateTime, FormatException>(new DateTime(y, 1, 1)));
+            var n = choice.Match(d => d, _ => AssertNotCalled<DateTime>());
 
             Assert.That(n, Is.EqualTo(new DateTime(1970, 1, 1)));
+        }
+
+        [Test]
+        public void BindRight()
+        {
+            BindRight(LeftResult.Bind);
+        }
+
+        [Test]
+        public void SelectManyRight()
+        {
+            BindRight(LeftResult.SelectMany);
         }
 
         [Test]
