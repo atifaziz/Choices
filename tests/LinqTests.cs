@@ -36,6 +36,18 @@ namespace Choices.Linq.Right.Tests
         }
 
         [Test]
+        public void Return()
+        {
+            var result =
+                RightResult
+                    .Return<Exception, int>(42)
+                    .Match(_ => AssertNotCalled<int>(),
+                           x => x);
+
+            Assert.That(result, Is.EqualTo(42));
+        }
+
+        [Test]
         public void BindLeft()
         {
             var error =
@@ -147,6 +159,18 @@ namespace Choices.Linq.Left.Tests
         {
             Assert.Fail("Unexpected call.");
             return default;
+        }
+
+        [Test]
+        public void Return()
+        {
+            var result =
+                LeftResult
+                    .Return<int, Exception>(42)
+                    .Match(x => x,
+                           _ => AssertNotCalled<int>());
+
+            Assert.That(result, Is.EqualTo(42));
         }
 
         [Test]
